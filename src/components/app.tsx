@@ -1,21 +1,20 @@
 import { h } from 'preact'
 import { Route, Router } from 'preact-router'
-
-// import Header from './header';
+import { StoreContext } from 'storeon/preact'
+import { store } from '../store/storeIndex'
 
 // Code-splitting is automated for `routes` directory
 import Home from '../routes/home/index'
-import Profile from '../routes/profile'
 
 const App = () => (
 	<div id="app">
-		<main>
-			<Router>
-				<Route path="/" component={Home} />
-				<Route path="/profile/" component={Profile} user="me" />
-				<Route path="/profile/:user" component={Profile} />
-			</Router>
-		</main>
+		<StoreContext.Provider value={store}>
+			<main>
+				<Router>
+					<Route path="/" component={Home} />
+				</Router>
+			</main>
+		</StoreContext.Provider>
 	</div>
 )
 

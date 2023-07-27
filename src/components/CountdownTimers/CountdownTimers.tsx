@@ -47,7 +47,7 @@ const CountdownTimer: FunctionalComponent<CountdownTimerProps> = ({
 		if (timeLeft === 0) {
 			if (activeTimerIndex < timers.length - 1) {
 				setActiveTimerIndex((prevIndex) => prevIndex + 1)
-				setTimeLeft(timers[activeTimerIndex].duration)
+				setTimeLeft(timers[activeTimerIndex].duration + 1)
 			} else {
 				resetTimers()
 			}

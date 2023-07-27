@@ -1,6 +1,6 @@
 import { h } from 'preact'
 import style from './style.css'
-import CountdownTimer from '../../components/Timer/Timer'
+import CountdownTimer from '../../components/CountdownTimers/CountdownTimers'
 
 interface Timer {
 	name: string
