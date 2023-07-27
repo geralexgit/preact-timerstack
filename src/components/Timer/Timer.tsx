@@ -22,9 +22,13 @@ const CountdownTimer: FunctionalComponent<CountdownTimerProps> = ({
 	}
 
 	const resetTimers = () => {
-		setActiveTimerIndex(0)
 		setIsTimerRunning(false)
+		setActiveTimerIndex(0)
 		setTimeLeft(timers[0].duration)
+	}
+
+	const pauseTimers = () => {
+		setIsTimerRunning(false)
 	}
 
 	useEffect(() => {
@@ -33,8 +37,6 @@ const CountdownTimer: FunctionalComponent<CountdownTimerProps> = ({
 			intervalId = window.setInterval(() => {
 				setTimeLeft((prevTimeLeft) => prevTimeLeft - 1)
 			}, 1000)
-		} else {
-			resetTimers()
 		}
 		return () => {
 			clearInterval(intervalId)
@@ -47,9 +49,8 @@ const CountdownTimer: FunctionalComponent<CountdownTimerProps> = ({
 				setActiveTimerIndex((prevIndex) => prevIndex + 1)
 				setTimeLeft(timers[activeTimerIndex].duration)
 			} else {
+				resetTimers()
 			}
-		} else if (timeLeft <= 0) {
-			resetTimers()
 		}
 	}, [timeLeft, timers, activeTimerIndex])
 
@@ -63,7 +64,10 @@ const CountdownTimer: FunctionalComponent<CountdownTimerProps> = ({
 				<button onClick={startTimer}>Start Timer</button>
 			)}
 			{isTimerRunning && (
-				<button onClick={resetTimers}>Stop Timer</button>
+				<button onClick={resetTimers}>Stop Timers</button>
+			)}
+			{isTimerRunning && (
+				<button onClick={pauseTimers}>Pause Timers</button>
 			)}
 		</div>
 	)
