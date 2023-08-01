@@ -1,20 +1,14 @@
 import { h, FunctionalComponent } from 'preact'
 import { useState, useEffect } from 'preact/hooks'
+import { useStoreon } from 'storeon/preact'
 
-interface Timer {
-	name: string
-	duration: number
-}
+const CountdownTimer: FunctionalComponent = () => {
+	const { timers } = useStoreon('timers')
 
-interface CountdownTimerProps {
-	timers: Timer[]
-}
-
-const CountdownTimer: FunctionalComponent<CountdownTimerProps> = ({
-	timers,
-}) => {
 	const [activeTimerIndex, setActiveTimerIndex] = useState(0)
-	const [timeLeft, setTimeLeft] = useState(timers[activeTimerIndex].duration)
+	const [timeLeft, setTimeLeft] = useState(
+		timers[activeTimerIndex]?.duration || 0
+	)
 	const [isTimerRunning, setIsTimerRunning] = useState(false)
 
 	const startTimer = () => {
@@ -24,7 +18,7 @@ const CountdownTimer: FunctionalComponent<CountdownTimerProps> = ({
 	const resetTimers = () => {
 		setIsTimerRunning(false)
 		setActiveTimerIndex(0)
-		setTimeLeft(timers[0].duration)
+		setTimeLeft(timers[0]?.duration || 0)
 	}
 
 	const pauseTimers = () => {
@@ -59,7 +53,7 @@ const CountdownTimer: FunctionalComponent<CountdownTimerProps> = ({
 	return (
 		<div>
 			<div>Time Left: {timeLeft} seconds</div>
-			<div>Current Timer: {currentTimer.name}</div>
+			<div>Current Timer: {currentTimer?.name}</div>
 			{!isTimerRunning && (
 				<button onClick={startTimer}>Start Timer</button>
 			)}

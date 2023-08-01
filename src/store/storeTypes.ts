@@ -9,6 +9,6 @@ export interface State {
 }
 
 export interface Events {
-	AddTimer: Timer
-	RemoveTimer: number
+	'timer/add': Timer
+	'timer/remove': number
 }
