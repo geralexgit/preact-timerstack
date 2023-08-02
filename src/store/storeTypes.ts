@@ -8,7 +8,7 @@ export interface IStatus {
 	currentIndex: number
 	timeLeft: number
 	totalTimeLeft: number
-	isTimerRunning: boolean
+	isActive: boolean
 }
 
 export interface State {
@@ -22,4 +22,5 @@ export interface Events {
 	'timer/updateIndex': number
 	'timer/updateTimer': number
 	'timer/updateTotalTimer': number
+	'timer/isActive': boolean
 }

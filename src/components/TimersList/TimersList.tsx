@@ -8,8 +8,6 @@ const TimersList: FunctionalComponent = () => {
 	}
 	return (
 		<div>
-			{console.log(timers)}
-
 			<ul>
 				{timers?.map((timer) => (
 					<li>

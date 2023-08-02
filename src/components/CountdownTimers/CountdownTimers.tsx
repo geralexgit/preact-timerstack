@@ -5,30 +5,30 @@ import { useStoreon } from 'storeon/preact'
 const CountdownTimer: FunctionalComponent = () => {
 	const {
 		timers,
-		status: { currentIndex },
+		status: { currentIndex, isActive },
 		dispatch,
 	} = useStoreon('timers', 'status')
-	// const [activeTimerIndex, setActiveTimerIndex] = useState(0)
 	const [timeLeft, setTimeLeft] = useState(
 		timers[currentIndex]?.duration || 0
 	)
-	const [isTimerRunning, setIsTimerRunning] = useState(false)
+	// const [isTimerRunning, setIsTimerRunning] = useState(false)
 
 	const resetTimers = () => {
-		setIsTimerRunning(false)
+		// setIsTimerRunning(false)
+		dispatch('timer/isActive', false)
 		dispatch('timer/updateIndex', 0)
 		setTimeLeft(timers[0]?.duration || 0)
 	}
 	const startTimer = () => {
-		setIsTimerRunning(true)
+		dispatch('timer/isActive', true)
 	}
 	const pauseTimers = () => {
-		setIsTimerRunning(false)
+		dispatch('timer/isActive', false)
 	}
 
 	useEffect(() => {
 		let intervalId: number
-		if (isTimerRunning) {
+		if (isActive) {
 			intervalId = window.setInterval(() => {
 				setTimeLeft((prevTimeLeft) => prevTimeLeft - 1)
 			}, 1000)
@@ -36,7 +36,7 @@ const CountdownTimer: FunctionalComponent = () => {
 		return () => {
 			clearInterval(intervalId)
 		}
-	}, [isTimerRunning, currentIndex])
+	}, [isActive, currentIndex])
 
 	useEffect(() => {
 		if (timeLeft === 0) {
@@ -53,15 +53,9 @@ const CountdownTimer: FunctionalComponent = () => {
 		<div>
 			<div>Time Left: {timeLeft} seconds</div>
 			<div>Current Timer: {timers[currentIndex]?.name}</div>
-			{!isTimerRunning && (
-				<button onClick={startTimer}>Start Timer</button>
-			)}
-			{isTimerRunning && (
-				<button onClick={resetTimers}>Stop Timers</button>
-			)}
-			{isTimerRunning && (
-				<button onClick={pauseTimers}>Pause Timers</button>
-			)}
+			{!isActive && <button onClick={startTimer}>Start Timer</button>}
+			{isActive && <button onClick={resetTimers}>Stop Timers</button>}
+			{isActive && <button onClick={pauseTimers}>Pause Timers</button>}
 		</div>
 	)
 }
