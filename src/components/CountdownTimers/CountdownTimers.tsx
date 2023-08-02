@@ -11,10 +11,8 @@ const CountdownTimer: FunctionalComponent = () => {
 	const [timeLeft, setTimeLeft] = useState(
 		timers[currentIndex]?.duration || 0
 	)
-	// const [isTimerRunning, setIsTimerRunning] = useState(false)
 
 	const resetTimers = () => {
-		// setIsTimerRunning(false)
 		dispatch('timer/isActive', false)
 		dispatch('timer/updateIndex', 0)
 		setTimeLeft(timers[0]?.duration || 0)

@@ -1,5 +1,5 @@
 import { h } from 'preact'
-import { Route, Router } from 'preact-router'
+// import { Route, Router } from 'preact-router'
 import { StoreContext } from 'storeon/preact'
 import { store } from '../store/storeIndex'
 
@@ -10,9 +10,10 @@ const App = () => (
 	<div id="app">
 		<StoreContext.Provider value={store}>
 			<main>
-				<Router>
+				<Home />
+				{/* <Router>
 					<Route path="/" component={Home} />
-				</Router>
+				</Router> */}
 			</main>
 		</StoreContext.Provider>
 	</div>
