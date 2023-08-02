@@ -2,14 +2,35 @@ import { StoreonModule } from 'storeon'
 
 import { State, Events } from '../storeTypes'
 
+// const [activeTimerIndex, setActiveTimerIndex] = useState(0)
+// const [timeLeft, setTimeLeft] = useState(
+// 	timers[activeTimerIndex]?.duration || 0
+// )
+// const [isTimerRunning, setIsTimerRunning] = useState(false)
+
 export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 	store.on('@init', (state) => ({
-		timers: [],
+		timers: [
+			{ id: 1, name: 'timer 1', duration: 3 },
+			{ id: 2, name: 'timer 2', duration: 5 },
+		],
+		status: {
+			currentIndex: 0,
+			timeLeft: 0,
+			totalTimeLeft: 0,
+			isTimerRunning: false,
+		},
 	}))
-	store.on('timer/add', (state, event) => ({
-		timers: [...state.timers, event],
+	store.on('timer/add', (state, payload) => ({
+		timers: [...state.timers, payload],
 	}))
-	store.on('timer/remove', (state, event) => ({
-		timers: state.timers.filter((timer) => timer.id !== event),
+	store.on('timer/remove', (state, payload) => ({
+		timers: state.timers.filter((timer) => timer.id !== payload),
+	}))
+	store.on('timer/add', (state, payload) => ({
+		timers: [...state.timers, payload],
+	}))
+	store.on('timer/updateIndex', (state, payload) => ({
+		status: { ...state.status, currentIndex: payload },
 	}))
 }

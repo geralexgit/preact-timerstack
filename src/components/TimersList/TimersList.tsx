@@ -13,7 +13,7 @@ const TimersList: FunctionalComponent = () => {
 			<ul>
 				{timers?.map((timer) => (
 					<li>
-						{timer.name}{' '}
+						{timer.name} {timer.duration}{' '}
 						<button onClick={() => removeTimer(timer.id)}>
 							❌
 						</button>

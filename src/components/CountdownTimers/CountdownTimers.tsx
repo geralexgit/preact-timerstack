@@ -3,24 +3,25 @@ import { useState, useEffect } from 'preact/hooks'
 import { useStoreon } from 'storeon/preact'
 
 const CountdownTimer: FunctionalComponent = () => {
-	const { timers } = useStoreon('timers')
-
-	const [activeTimerIndex, setActiveTimerIndex] = useState(0)
+	const {
+		timers,
+		status: { currentIndex },
+		dispatch,
+	} = useStoreon('timers', 'status')
+	// const [activeTimerIndex, setActiveTimerIndex] = useState(0)
 	const [timeLeft, setTimeLeft] = useState(
-		timers[activeTimerIndex]?.duration || 0
+		timers[currentIndex]?.duration || 0
 	)
 	const [isTimerRunning, setIsTimerRunning] = useState(false)
 
+	const resetTimers = () => {
+		setIsTimerRunning(false)
+		dispatch('timer/updateIndex', 0)
+		setTimeLeft(timers[0]?.duration || 0)
+	}
 	const startTimer = () => {
 		setIsTimerRunning(true)
 	}
-
-	const resetTimers = () => {
-		setIsTimerRunning(false)
-		setActiveTimerIndex(0)
-		setTimeLeft(timers[0]?.duration || 0)
-	}
-
 	const pauseTimers = () => {
 		setIsTimerRunning(false)
 	}
@@ -35,25 +36,23 @@ const CountdownTimer: FunctionalComponent = () => {
 		return () => {
 			clearInterval(intervalId)
 		}
-	}, [isTimerRunning, activeTimerIndex])
+	}, [isTimerRunning, currentIndex])
 
 	useEffect(() => {
 		if (timeLeft === 0) {
-			if (activeTimerIndex < timers.length - 1) {
-				setActiveTimerIndex((prevIndex) => prevIndex + 1)
-				setTimeLeft(timers[activeTimerIndex].duration + 1)
+			if (currentIndex < timers.length - 1) {
+				setTimeLeft(timers[currentIndex + 1].duration)
+				dispatch('timer/updateIndex', currentIndex + 1)
 			} else {
 				resetTimers()
 			}
 		}
-	}, [timeLeft, timers, activeTimerIndex])
-
-	const currentTimer = timers[activeTimerIndex]
+	}, [timeLeft, timers])
 
 	return (
 		<div>
 			<div>Time Left: {timeLeft} seconds</div>
-			<div>Current Timer: {currentTimer?.name}</div>
+			<div>Current Timer: {timers[currentIndex]?.name}</div>
 			{!isTimerRunning && (
 				<button onClick={startTimer}>Start Timer</button>
 			)}
