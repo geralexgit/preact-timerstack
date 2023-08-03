@@ -27,7 +27,10 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 	store.on('timer/isActive', (state, payload) => ({
 		status: { ...state.status, isActive: payload },
 	}))
-	store.on('timer/setTimeLeft', (state, payload) => ({
+	store.on('timer/decrementTime', (state) => ({
+		status: { ...state.status, timeLeft: state.status.timeLeft - 1 },
+	}))
+	store.on('timer/setTime', (state, payload) => ({
 		status: { ...state.status, timeLeft: payload },
 	}))
 }

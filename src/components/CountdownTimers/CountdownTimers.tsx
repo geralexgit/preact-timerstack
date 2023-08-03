@@ -5,17 +5,14 @@ import { useStoreon } from 'storeon/preact'
 const CountdownTimer: FunctionalComponent = () => {
 	const {
 		timers,
-		status: { currentIndex, isActive },
+		status: { currentIndex, isActive, timeLeft },
 		dispatch,
 	} = useStoreon('timers', 'status')
-	const [timeLeft, setTimeLeft] = useState(
-		timers[currentIndex]?.duration || 0
-	)
 
 	const resetTimers = () => {
 		dispatch('timer/isActive', false)
 		dispatch('timer/updateIndex', 0)
-		setTimeLeft(timers[0]?.duration || 0)
+		dispatch('timer/setTime', timers[0]?.duration || 0)
 	}
 	const startTimer = () => {
 		dispatch('timer/isActive', true)
@@ -28,7 +25,7 @@ const CountdownTimer: FunctionalComponent = () => {
 		let intervalId: number
 		if (isActive) {
 			intervalId = window.setInterval(() => {
-				setTimeLeft((prevTimeLeft) => prevTimeLeft - 1)
+				dispatch('timer/decrementTime')
 			}, 1000)
 		}
 		return () => {
@@ -39,7 +36,7 @@ const CountdownTimer: FunctionalComponent = () => {
 	useEffect(() => {
 		if (timeLeft === 0) {
 			if (currentIndex < timers.length - 1) {
-				setTimeLeft(timers[currentIndex + 1].duration)
+				dispatch('timer/setTime', timers[currentIndex + 1].duration)
 				dispatch('timer/updateIndex', currentIndex + 1)
 			} else {
 				resetTimers()

@@ -20,7 +20,8 @@ export interface Events {
 	'timer/add': Timer
 	'timer/remove': number
 	'timer/updateIndex': number
-	'timer/setTimeLeft': number
+	'timer/decrementTime': void
+	'timer/setTime': number
 	'timer/updateTotalTimer': number
 	'timer/isActive': boolean
 }
