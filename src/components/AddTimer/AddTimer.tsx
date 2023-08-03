@@ -2,17 +2,26 @@ import { h, FunctionalComponent } from 'preact'
 import { useState } from 'preact/hooks'
 import { useStoreon } from 'storeon/preact'
 
-const AddTimer = () => {
+const AddTimer: FunctionalComponent = () => {
 	const { dispatch } = useStoreon('timers')
-	const [formValues, setFormValues] =
-		useState<Record<string, string | number>>()
+	const [formValues, setFormValues] = useState<
+		Record<string, string | number>
+	>({
+		name: '',
+		minutes: 0,
+		seconds: 0,
+	})
 
 	const onSubmit = (e) => {
 		e.preventDefault()
 		const id = Date.now()
 		const duration =
-			Number(formValues.minutes) * 60 + Number(formValues.seconds)
+			Number(formValues.minutes) * 60 + Number(!!formValues.seconds)
 		const name = formValues.name
+		if (duration <= 0) {
+			alert('timer is empty')
+			return
+		}
 		const updatedValues = {
 			id,
 			duration,
@@ -39,10 +48,12 @@ const AddTimer = () => {
 				value={formValues?.name}
 				data-name="name"
 				onInput={onInput}
+				required
 			/>
 			<input
 				type="number"
 				value={formValues?.minutes}
+				defaultValue="0"
 				data-name="minutes"
 				onInput={onInput}
 				max={99}
@@ -51,6 +62,7 @@ const AddTimer = () => {
 				type="number"
 				value={formValues?.seconds}
 				data-name="seconds"
+				defaultValue="0"
 				onInput={onInput}
 				max={60}
 			/>
