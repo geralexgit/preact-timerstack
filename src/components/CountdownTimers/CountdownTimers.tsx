@@ -1,6 +1,7 @@
 import { h, FunctionalComponent } from 'preact'
 import { useState, useEffect } from 'preact/hooks'
 import { useStoreon } from 'storeon/preact'
+import { voiseMsg } from '../../helpers/voiseMsg'
 
 const CountdownTimer: FunctionalComponent = () => {
 	const {
@@ -12,10 +13,11 @@ const CountdownTimer: FunctionalComponent = () => {
 	const resetTimers = () => {
 		dispatch('timer/isActive', false)
 		dispatch('timer/updateIndex', 0)
-		dispatch('timer/setTime', timers[0]?.duration || 0)
+		dispatch('timer/setTime', timers[0].duration)
 	}
 	const startTimer = () => {
 		dispatch('timer/isActive', true)
+		voiseMsg(timers[currentIndex].name)
 	}
 	const pauseTimers = () => {
 		dispatch('timer/isActive', false)
@@ -34,10 +36,11 @@ const CountdownTimer: FunctionalComponent = () => {
 	}, [isActive, currentIndex])
 
 	useEffect(() => {
-		if (timeLeft === 0) {
+		if (timeLeft === 0 && isActive) {
 			if (currentIndex < timers.length - 1) {
 				dispatch('timer/setTime', timers[currentIndex + 1].duration)
 				dispatch('timer/updateIndex', currentIndex + 1)
+				voiseMsg(timers[currentIndex + 1].name)
 			} else {
 				resetTimers()
 			}
