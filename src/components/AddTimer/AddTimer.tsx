@@ -16,7 +16,7 @@ const AddTimer: FunctionalComponent = () => {
 		e.preventDefault()
 		const id = Date.now()
 		const duration =
-			Number(formValues.minutes) * 60 + Number(!!formValues.seconds)
+			Number(formValues.minutes) * 60 + Number(formValues.seconds)
 		const name = formValues.name
 		if (duration <= 0) {
 			alert('timer is empty')

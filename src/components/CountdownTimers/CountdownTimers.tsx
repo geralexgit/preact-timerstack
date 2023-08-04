@@ -1,5 +1,5 @@
 import { h, FunctionalComponent } from 'preact'
-import { useState, useEffect } from 'preact/hooks'
+import { useEffect } from 'preact/hooks'
 import { useStoreon } from 'storeon/preact'
 import { voiseMsg } from '../../helpers/voiseMsg'
 
@@ -47,13 +47,19 @@ const CountdownTimer: FunctionalComponent = () => {
 		}
 	}, [timeLeft, timers])
 
+	useEffect(() => {
+		if (!isActive && timeLeft === 0) {
+			resetTimers()
+		}
+	}, [])
+
 	return (
 		<div>
 			<div>Time Left: {timeLeft} seconds</div>
 			<div>Current Timer: {timers[currentIndex]?.name}</div>
 			{!isActive && <button onClick={startTimer}>Start Timer</button>}
-			{isActive && <button onClick={resetTimers}>Stop Timers</button>}
 			{isActive && <button onClick={pauseTimers}>Pause Timers</button>}
+			<button onClick={resetTimers}>Stop Timers</button>
 		</div>
 	)
 }
