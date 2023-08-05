@@ -5,8 +5,20 @@ import { State, Events } from '../storeTypes'
 export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 	store.on('@init', (state) => ({
 		timers: [
-			{ id: 1, name: 'timer 1', duration: 3 },
-			{ id: 2, name: 'timer 2', duration: 5 },
+			{
+				id: 1,
+				name: 'timer 1',
+				duration: 3,
+				isFinished: false,
+				progress: 0,
+			},
+			{
+				id: 2,
+				name: 'timer 2',
+				duration: 5,
+				isFinished: false,
+				progress: 0,
+			},
 		],
 		status: {
 			currentIndex: 0,
@@ -16,11 +28,51 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 		},
 	}))
 	store.on('timer/add', (state, payload) => ({
-		timers: [...state.timers, payload],
+		timers: [
+			...state.timers,
+			{ ...payload, isFinished: false, progress: 0 },
+		],
 	}))
 	store.on('timer/remove', (state, payload) => ({
 		timers: state.timers.filter((timer) => timer.id !== payload),
 	}))
+	store.on('timer/resetProgress', (state) => {
+		const updatedTimers = state.timers.map((timer) => ({
+			...timer,
+			isFinished: false,
+			progress: 0,
+		}))
+		store.dispatch('timer/isActive', false)
+		store.dispatch('timer/updateIndex', 0)
+		store.dispatch('timer/setTime', state.timers[0].duration)
+		store.dispatch('timer/setTime', state.timers[0].duration)
+		return {
+			timers: updatedTimers,
+		}
+	})
+
+	store.on('timer/incrementProgress', (state, id) => {
+		const updatedTimers = state.timers.map((timer) => {
+			if (timer.id === id) {
+				timer.progress++
+			}
+			return timer
+		})
+		return {
+			timers: updatedTimers,
+		}
+	})
+	store.on('timer/incrementProgress', (state, id) => {
+		const updatedTimers = state.timers.map((timer) => {
+			if (timer.id === id) {
+				timer.progress++
+			}
+			return timer
+		})
+		return {
+			timers: updatedTimers,
+		}
+	})
 	store.on('timer/updateIndex', (state, payload) => ({
 		status: { ...state.status, currentIndex: payload },
 	}))

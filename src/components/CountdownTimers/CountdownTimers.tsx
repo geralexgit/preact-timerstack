@@ -11,9 +11,7 @@ const CountdownTimer: FunctionalComponent = () => {
 	} = useStoreon('timers', 'status')
 
 	const resetTimers = () => {
-		dispatch('timer/isActive', false)
-		dispatch('timer/updateIndex', 0)
-		dispatch('timer/setTime', timers[0].duration)
+		dispatch('timer/resetProgress')
 	}
 	const startTimer = () => {
 		dispatch('timer/isActive', true)
@@ -28,6 +26,7 @@ const CountdownTimer: FunctionalComponent = () => {
 		if (isActive) {
 			intervalId = window.setInterval(() => {
 				dispatch('timer/decrementTime')
+				dispatch('timer/incrementProgress', timers[currentIndex].id)
 			}, 1000)
 		}
 		return () => {
@@ -52,11 +51,14 @@ const CountdownTimer: FunctionalComponent = () => {
 			resetTimers()
 		}
 	}, [])
-
+	const timerPorgress = Math.round(
+		(timers[currentIndex]?.progress / timers[currentIndex]?.duration) * 100
+	)
 	return (
 		<div>
 			<div>Time Left: {timeLeft} seconds</div>
 			<div>Current Timer: {timers[currentIndex]?.name}</div>
+			<div>Progress: {timerPorgress}</div>
 			{!isActive && <button onClick={startTimer}>Start Timer</button>}
 			{isActive && <button onClick={pauseTimers}>Pause Timers</button>}
 			<button onClick={resetTimers}>Stop Timers</button>

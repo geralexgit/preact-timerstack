@@ -2,6 +2,8 @@ export interface Timer {
 	id: number
 	name: string
 	duration: number
+	progress: number
+	isFinished: boolean
 }
 
 export interface IStatus {
@@ -21,7 +23,10 @@ export interface Events {
 	'timer/remove': number
 	'timer/updateIndex': number
 	'timer/decrementTime': void
+	'timer/incrementProgress': number
 	'timer/setTime': number
 	'timer/updateTotalTimer': number
 	'timer/isActive': boolean
+	'timer/isFinished': number // id
+	'timer/resetProgress': void
 }
