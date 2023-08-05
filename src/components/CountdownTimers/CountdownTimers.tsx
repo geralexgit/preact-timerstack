@@ -1,5 +1,5 @@
 import { h, FunctionalComponent } from 'preact'
-import { useEffect } from 'preact/hooks'
+import { useEffect, useState } from 'preact/hooks'
 import { useStoreon } from 'storeon/preact'
 import { voiseMsg } from '../../helpers/voiseMsg'
 
@@ -10,8 +10,16 @@ const CountdownTimer: FunctionalComponent = () => {
 		dispatch,
 	} = useStoreon('timers', 'status')
 
+	const [progress, setProgress] = useState(
+		Math.round(
+			(timers[currentIndex]?.progress / timers[currentIndex]?.duration) *
+				100
+		)
+	)
+
 	const resetTimers = () => {
-		dispatch('timer/resetProgress')
+		dispatch('timer/stopTimers')
+		setProgress(0)
 	}
 	const startTimer = () => {
 		dispatch('timer/isActive', true)
@@ -27,6 +35,13 @@ const CountdownTimer: FunctionalComponent = () => {
 			intervalId = window.setInterval(() => {
 				dispatch('timer/decrementTime')
 				dispatch('timer/incrementProgress', timers[currentIndex].id)
+				setProgress(
+					Math.round(
+						(timers[currentIndex]?.progress /
+							timers[currentIndex]?.duration) *
+							100
+					)
+				)
 			}, 1000)
 		}
 		return () => {
@@ -51,14 +66,11 @@ const CountdownTimer: FunctionalComponent = () => {
 			resetTimers()
 		}
 	}, [])
-	const timerPorgress = Math.round(
-		(timers[currentIndex]?.progress / timers[currentIndex]?.duration) * 100
-	)
 	return (
 		<div>
 			<div>Time Left: {timeLeft} seconds</div>
 			<div>Current Timer: {timers[currentIndex]?.name}</div>
-			<div>Progress: {timerPorgress}</div>
+			<div>Progress: {progress}</div>
 			{!isActive && <button onClick={startTimer}>Start Timer</button>}
 			{isActive && <button onClick={pauseTimers}>Pause Timers</button>}
 			<button onClick={resetTimers}>Stop Timers</button>

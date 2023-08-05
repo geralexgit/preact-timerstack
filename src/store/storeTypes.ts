@@ -28,5 +28,5 @@ export interface Events {
 	'timer/updateTotalTimer': number
 	'timer/isActive': boolean
 	'timer/isFinished': number // id
-	'timer/resetProgress': void
+	'timer/stopTimers': void
 }

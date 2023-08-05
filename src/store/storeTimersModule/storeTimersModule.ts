@@ -36,16 +36,15 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 	store.on('timer/remove', (state, payload) => ({
 		timers: state.timers.filter((timer) => timer.id !== payload),
 	}))
-	store.on('timer/resetProgress', (state) => {
+	store.on('timer/stopTimers', (state) => {
+		store.dispatch('timer/isActive', false)
+		store.dispatch('timer/updateIndex', 0)
+		store.dispatch('timer/setTime', state.timers[0].duration)
 		const updatedTimers = state.timers.map((timer) => ({
 			...timer,
 			isFinished: false,
 			progress: 0,
 		}))
-		store.dispatch('timer/isActive', false)
-		store.dispatch('timer/updateIndex', 0)
-		store.dispatch('timer/setTime', state.timers[0].duration)
-		store.dispatch('timer/setTime', state.timers[0].duration)
 		return {
 			timers: updatedTimers,
 		}
@@ -54,7 +53,7 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 	store.on('timer/incrementProgress', (state, id) => {
 		const updatedTimers = state.timers.map((timer) => {
 			if (timer.id === id) {
-				timer.progress++
+				timer.progress + 1
 			}
 			return timer
 		})
