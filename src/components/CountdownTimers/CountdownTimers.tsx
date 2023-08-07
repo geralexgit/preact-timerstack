@@ -55,6 +55,7 @@ const CountdownTimer: FunctionalComponent = () => {
 				dispatch('timer/updateIndex', currentIndex + 1)
 				voiseMsg(timers[currentIndex + 1].name)
 			} else {
+				dispatch('timer/isFinished', timers[currentIndex].id)
 				pauseTimers()
 			}
 		}
