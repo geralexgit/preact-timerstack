@@ -20,6 +20,11 @@ const CountdownTimer: FunctionalComponent = () => {
 		dispatch('timer/stopTimers')
 	}
 	const startTimer = () => {
+		console.log(timers[timers.length - 1])
+		if (timers[timers.length - 1].isFinished) {
+			console.log(timers[timers.length - 1])
+			resetTimers()
+		}
 		dispatch('timer/updateTotalTime')
 		dispatch('timer/setIsActive', true)
 		voiseMsg(timers[currentIndex].name)
@@ -50,7 +55,7 @@ const CountdownTimer: FunctionalComponent = () => {
 				dispatch('timer/updateIndex', currentIndex + 1)
 				voiseMsg(timers[currentIndex + 1].name)
 			} else {
-				resetTimers()
+				pauseTimers()
 			}
 		}
 	}, [timeLeft, timers])

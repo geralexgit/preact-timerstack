@@ -5,6 +5,7 @@ import { store } from '../store/storeIndex'
 
 // Code-splitting is automated for `routes` directory
 import Home from '../routes/home/index'
+import ProgressBar from './ProgressBar/ProgressBar'
 
 const App = () => (
 	<div id="app">
@@ -14,6 +15,7 @@ const App = () => (
 				{/* <Router>
 					<Route path="/" component={Home} />
 				</Router> */}
+				<ProgressBar />
 			</main>
 		</StoreContext.Provider>
 	</div>
