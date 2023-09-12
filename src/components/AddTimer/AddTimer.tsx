@@ -3,7 +3,10 @@ import { useState } from 'preact/hooks'
 import { useStoreon } from 'storeon/preact'
 
 const AddTimer: FunctionalComponent = () => {
-	const { dispatch } = useStoreon('timers')
+	const {
+		dispatch,
+		status: { isActive },
+	} = useStoreon('timers', 'status')
 	const [formValues, setFormValues] = useState<
 		Record<string, string | number>
 	>({
@@ -28,6 +31,11 @@ const AddTimer: FunctionalComponent = () => {
 			name,
 		}
 		dispatch('timer/add', updatedValues)
+		setFormValues({
+			name: '',
+			minutes: 0,
+			seconds: 0,
+		})
 	}
 
 	const onInput = (e) => {
@@ -66,7 +74,9 @@ const AddTimer: FunctionalComponent = () => {
 				onInput={onInput}
 				max={60}
 			/>
-			<button type="submit">Submit</button>
+			<button type="submit" disabled={isActive}>
+				Add
+			</button>
 		</form>
 	)
 }

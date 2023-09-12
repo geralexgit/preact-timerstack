@@ -16,14 +16,9 @@ const CountdownTimer: FunctionalComponent = () => {
 		dispatch,
 	} = useStoreon('timers', 'status')
 
-	const resetTimers = () => {
-		dispatch('timer/stopTimers')
-	}
 	const startTimer = () => {
-		console.log(timers[timers.length - 1])
 		if (timers[timers.length - 1].isFinished) {
-			console.log(timers[timers.length - 1])
-			resetTimers()
+			dispatch('timer/stopTimers')
 		}
 		dispatch('timer/updateTotalTime')
 		dispatch('timer/setIsActive', true)
@@ -56,7 +51,7 @@ const CountdownTimer: FunctionalComponent = () => {
 				voiseMsg(timers[currentIndex + 1].name)
 			} else {
 				dispatch('timer/isFinished', timers[currentIndex].id)
-				pauseTimers()
+				dispatch('timer/stopTimers')
 			}
 		}
 	}, [timeLeft, timers])
@@ -67,7 +62,7 @@ const CountdownTimer: FunctionalComponent = () => {
 
 	useEffect(() => {
 		if (!isActive && timeLeft === 0) {
-			resetTimers()
+			dispatch('timer/stopTimers')
 		}
 	}, [])
 	return (
@@ -77,9 +72,9 @@ const CountdownTimer: FunctionalComponent = () => {
 			<div>Progress: {timers[currentIndex]?.progressPrecent}</div>
 			<div>Total progress sec: {totalProgress}</div>
 			<div>Total progress %: {totalProgressPrecent}</div>
-			{!isActive && <button onClick={startTimer}>Start Timer</button>}
-			{isActive && <button onClick={pauseTimers}>Pause Timers</button>}
-			<button onClick={resetTimers}>Stop Timers</button>
+			{!isActive && <button onClick={startTimer}>▶️</button>}
+			{isActive && <button onClick={pauseTimers}>⏸︎</button>}
+			<button onClick={() => dispatch('timer/stopTimers')}>⏹</button>
 		</div>
 	)
 }
