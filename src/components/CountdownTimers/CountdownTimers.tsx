@@ -65,6 +65,7 @@ const CountdownTimer: FunctionalComponent = () => {
 			dispatch('timer/stopTimers')
 		}
 	}, [])
+
 	return (
 		<div>
 			<div>Time Left: {timeLeft} seconds</div>

@@ -4,24 +4,52 @@ import { State, Events } from '../storeTypes'
 
 export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 	store.on('@init', () => ({
-		timers: [
-			{
-				id: 1,
-				name: 'timer 1',
-				duration: 3,
-				isFinished: false,
-				progress: 0,
-				progressPrecent: 0,
+		timersLists: {
+			listId1: {
+				listName: 'list 1',
+				timers: [
+					{
+						id: 1,
+						name: 'timer 1',
+						duration: 3,
+						isFinished: false,
+						progress: 0,
+						progressPrecent: 0,
+					},
+					{
+						id: 2,
+						name: 'timer 2',
+						duration: 5,
+						isFinished: false,
+						progress: 0,
+						progressPrecent: 0,
+					},
+				],
 			},
-			{
-				id: 2,
-				name: 'timer 2',
-				duration: 5,
-				isFinished: false,
-				progress: 0,
-				progressPrecent: 0,
+
+			listId2: {
+				listName: 'list 2',
+				timers: [
+					{
+						id: 4,
+						name: 'timer 4',
+						duration: 3,
+						isFinished: false,
+						progress: 0,
+						progressPrecent: 0,
+					},
+					{
+						id: 5,
+						name: 'timer 5',
+						duration: 5,
+						isFinished: false,
+						progress: 0,
+						progressPrecent: 0,
+					},
+				],
 			},
-		],
+		},
+
 		status: {
 			currentIndex: 0,
 			timeLeft: 0,
@@ -33,6 +61,7 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 		},
 	}))
 	store.on('timer/add', (state, payload) => {
+		const { listName, id, duration, name } = payload
 		return {
 			timers: [
 				...state.timers,

@@ -18,13 +18,18 @@ export interface IStatus {
 }
 
 export interface State {
-	timers: Timer[]
+	timersLists: Record<
+		string,
+		{
+			timers: Timer[]
+		}
+	>
 	status: IStatus
 }
 
 export interface Events {
-	'timer/add': Timer
-	'timer/remove': number
+	'timer/add': { listId: number; timer: Timer }
+	'timer/remove': { listId: number; timerId: number }
 	'timer/updateIndex': number
 	'timer/decrementTime': void
 	'timer/incrementProgress': number

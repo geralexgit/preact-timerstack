@@ -6,6 +6,6 @@ import { storeonDevtools } from 'storeon/devtools'
 
 export const store = createStoreon<State, Events>([
 	storeTimersModule,
-	persistState(['timers', 'status']),
+	// persistState(['timers', 'status']),
 	process.env.NODE_ENV !== 'production' && storeonDevtools,
 ])

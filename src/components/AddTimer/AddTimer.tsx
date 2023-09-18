@@ -7,6 +7,7 @@ const AddTimer: FunctionalComponent = () => {
 		dispatch,
 		status: { isActive },
 	} = useStoreon('timers', 'status')
+
 	const [formValues, setFormValues] = useState<
 		Record<string, string | number>
 	>({
