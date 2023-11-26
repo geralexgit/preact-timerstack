@@ -8,14 +8,14 @@ import Home from '../routes/home/index'
 import ProgressBar from './ProgressBar/ProgressBar'
 
 const App = () => (
-	<div id="app">
+	<div id="app" className="relative p-40">
 		<StoreContext.Provider value={store}>
 			<main>
+				<ProgressBar />
 				<Home />
 				{/* <Router>
 					<Route path="/" component={Home} />
 				</Router> */}
-				<ProgressBar />
 			</main>
 		</StoreContext.Provider>
 	</div>
