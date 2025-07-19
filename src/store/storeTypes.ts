@@ -22,6 +22,13 @@ export interface State {
 	status: IStatus
 }
 
+export interface TimerList {
+	id: string
+	name: string
+	timers: Omit<Timer, 'progress' | 'progressPrecent' | 'isFinished'>[]
+	createdAt: number
+}
+
 export interface Events {
 	'timer/add': Timer
 	'timer/remove': number
@@ -36,4 +43,8 @@ export interface Events {
 	'timer/incrementTotalProgress': void
 	'timer/updateTotalTime': void
 	'timer/resetTotalProgress': void
+	'timer/saveList': { name: string }
+	'timer/loadList': TimerList
+	'timer/deleteList': string
+	'timer/clearAll': void
 }

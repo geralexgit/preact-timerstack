@@ -138,4 +138,72 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 			},
 		}
 	})
+
+	// Save/Load Timer Lists
+	store.on('timer/saveList', (state, payload) => {
+		const timerList = {
+			id: Date.now().toString(),
+			name: payload.name,
+			timers: state.timers.map(timer => ({
+				id: timer.id,
+				name: timer.name,
+				duration: timer.duration
+			})),
+			createdAt: Date.now()
+		}
+		
+		// Get existing saved lists from localStorage
+		const savedLists = JSON.parse(localStorage.getItem('savedTimerLists') || '[]')
+		savedLists.push(timerList)
+		localStorage.setItem('savedTimerLists', JSON.stringify(savedLists))
+		
+		return state
+	})
+
+	store.on('timer/loadList', (state, payload) => {
+		// Convert saved timers to full timer objects
+		const loadedTimers = payload.timers.map(timer => ({
+			...timer,
+			progress: 0,
+			progressPrecent: 0,
+			isFinished: false
+		}))
+		
+		// Reset status for new timers
+		const newStatus = {
+			...state.status,
+			currentIndex: 0,
+			timeLeft: loadedTimers.length > 0 ? loadedTimers[0].duration : 0,
+			isActive: false,
+			totalProgress: 0,
+			totalProgressPrecent: 0,
+		}
+		
+		return {
+			timers: loadedTimers,
+			status: newStatus
+		}
+	})
+
+	store.on('timer/deleteList', (state, listId) => {
+		const savedLists = JSON.parse(localStorage.getItem('savedTimerLists') || '[]')
+		const filteredLists = savedLists.filter(list => list.id !== listId)
+		localStorage.setItem('savedTimerLists', JSON.stringify(filteredLists))
+		
+		return state
+	})
+
+	store.on('timer/clearAll', (state) => {
+		return {
+			timers: [],
+			status: {
+				...state.status,
+				currentIndex: 0,
+				timeLeft: 0,
+				isActive: false,
+				totalProgress: 0,
+				totalProgressPrecent: 0,
+			}
+		}
+	})
 }
