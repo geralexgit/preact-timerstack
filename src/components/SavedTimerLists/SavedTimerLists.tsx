@@ -160,8 +160,8 @@ const SavedTimerLists: FunctionalComponent = () => {
 
 	return (
 		<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
-			<div className="flex items-center justify-between mb-4">
-				<h2 className="text-xl font-semibold text-gray-800 dark:text-white flex items-center">
+			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+				<h2 className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white flex items-center">
 					💾 Saved Timer Lists
 				</h2>
 				<div className="flex flex-wrap gap-2">

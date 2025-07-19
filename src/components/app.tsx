@@ -10,14 +10,14 @@ import ProgressBar from './ProgressBar/ProgressBar'
 const App = () => (
 	<div id="app" className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
 		<StoreContext.Provider value={store}>
-			<main className="container mx-auto px-4 py-8 max-w-4xl">
-				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 mb-6">
-					<h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-8 text-center">
+			<main className="container mx-auto px-1 sm:px-4 py-2 sm:py-8 max-w-4xl">
+				<div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-2xl shadow-xl p-2 sm:p-6 mb-20 sm:mb-6">
+					<h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white mb-6 sm:mb-8 text-center">
 						⏱️ Timer Stack
 					</h1>
 					<Home />
 				</div>
-				<ProgressBar />
+				{/* <ProgressBar /> */}
 			</main>
 		</StoreContext.Provider>
 	</div>

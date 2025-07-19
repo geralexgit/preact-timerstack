@@ -6,11 +6,11 @@ import Modal from '../Modal/Modal'
 const TimersList: FunctionalComponent = () => {
 	const { timers, dispatch } = useStoreon('timers')
 	const [showNewListModal, setShowNewListModal] = useState(false)
-	
+
 	const removeTimer = (id: number) => {
 		dispatch('timer/remove', id)
 	}
-	
+
 	const handleNewListClick = () => {
 		if (timers.length > 0) {
 			setShowNewListModal(true)
@@ -19,13 +19,13 @@ const TimersList: FunctionalComponent = () => {
 			handleConfirmNewList()
 		}
 	}
-	
+
 	const handleConfirmNewList = () => {
 		dispatch('timer/stopTimers')
 		dispatch('timer/clearAll')
 		setShowNewListModal(false)
 	}
-	
+
 	const formatTime = (seconds: number) => {
 		const mins = Math.floor(seconds / 60)
 		const secs = seconds % 60
@@ -33,14 +33,14 @@ const TimersList: FunctionalComponent = () => {
 	}
 
 	return (
-		<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
-			<div className="flex items-center justify-between mb-4">
-				<h2 className="text-xl font-semibold text-gray-800 dark:text-white flex items-center">
+		<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
+			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-4">
+				<h2 className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white flex items-center">
 					📋 Timer Queue
 				</h2>
 				<button
 					onClick={handleNewListClick}
-					className="bg-cyan-500 hover:bg-cyan-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+					className="bg-cyan-500 hover:bg-cyan-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors self-start sm:self-auto"
 					title="Start fresh with an empty timer list"
 				>
 					✨ New List
@@ -63,7 +63,7 @@ const TimersList: FunctionalComponent = () => {
 									<p className="text-sm text-gray-500 dark:text-gray-400">{formatTime(timer.duration)}</p>
 								</div>
 							</div>
-							<button 
+							<button
 								onClick={() => removeTimer(timer.id)}
 								className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 p-2 rounded-lg transition-colors"
 								title="Remove timer"
@@ -96,7 +96,7 @@ const TimersList: FunctionalComponent = () => {
 							</p>
 						</div>
 					</div>
-					
+
 					<div className="text-sm text-gray-600 dark:text-gray-400">
 						<p className="mb-2">
 							<strong>What will happen:</strong>
@@ -107,7 +107,7 @@ const TimersList: FunctionalComponent = () => {
 							<li>You'll start with a fresh, empty timer list</li>
 						</ul>
 					</div>
-					
+
 					<div className="flex space-x-3 pt-4">
 						<button
 							onClick={handleConfirmNewList}

@@ -99,8 +99,8 @@ const AddTimer: FunctionalComponent = () => {
 	}
 
 	return (
-		<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
-			<h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+		<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
+			<h2 className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
 				➕ Add New Timer
 			</h2>
 			<form onSubmit={onSubmit} className="space-y-4">
