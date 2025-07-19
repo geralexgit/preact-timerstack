@@ -65,16 +65,103 @@ const CountdownTimer: FunctionalComponent = () => {
 			dispatch('timer/stopTimers')
 		}
 	}, [])
+	const formatTime = (seconds: number) => {
+		const mins = Math.floor(seconds / 60)
+		const secs = seconds % 60
+		return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
+	}
+
 	return (
-		<div>
-			<div>Time Left: {timeLeft} seconds</div>
-			<div>Current Timer: {timers[currentIndex]?.name}</div>
-			<div>Progress: {timers[currentIndex]?.progressPrecent}</div>
-			<div>Total progress sec: {totalProgress}</div>
-			<div>Total progress %: {totalProgressPrecent}</div>
-			{!isActive && <button onClick={startTimer}>▶️</button>}
-			{isActive && <button onClick={pauseTimers}>⏸︎</button>}
-			<button onClick={() => dispatch('timer/stopTimers')}>⏹</button>
+		<div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl p-8 text-white">
+			<h2 className="text-2xl font-bold mb-6 text-center">Current Timer</h2>
+			
+			{/* Main Timer Display */}
+			<div className="text-center mb-8">
+				<div className="text-6xl font-mono font-bold mb-4 tracking-wider">
+					{formatTime(timeLeft)}
+				</div>
+				<div className="text-xl font-medium opacity-90 mb-2">
+					{timers[currentIndex]?.name || 'No timer selected'}
+				</div>
+				<div className="text-sm opacity-75">
+					Timer {currentIndex + 1} of {timers.length}
+				</div>
+			</div>
+
+			{/* Progress Indicators */}
+			<div className="space-y-4 mb-8">
+				<div>
+					<div className="flex justify-between text-sm mb-2">
+						<span>Current Timer Progress</span>
+						<span>{Math.round(timers[currentIndex]?.progressPrecent || 0)}%</span>
+					</div>
+					<div className="w-full bg-white/20 rounded-full h-3">
+						<div 
+							className="bg-white rounded-full h-3 transition-all duration-1000 ease-out"
+							style={`width: ${timers[currentIndex]?.progressPrecent || 0}%`}
+						></div>
+					</div>
+				</div>
+				
+				<div>
+					<div className="flex justify-between text-sm mb-2">
+						<span>Total Progress</span>
+						<span>{Math.round(totalProgressPrecent)}%</span>
+					</div>
+					<div className="w-full bg-white/20 rounded-full h-3">
+						<div 
+							className="bg-gradient-to-r from-green-400 to-blue-400 rounded-full h-3 transition-all duration-1000 ease-out"
+							style={`width: ${totalProgressPrecent}%`}
+						></div>
+					</div>
+				</div>
+			</div>
+
+			{/* Control Buttons */}
+			<div className="flex justify-center space-x-4">
+				{!isActive && (
+					<button 
+						onClick={startTimer}
+						className="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-full transition-colors flex items-center space-x-2 text-lg shadow-lg"
+						disabled={timers.length === 0}
+					>
+						<span>▶️</span>
+						<span>Start</span>
+					</button>
+				)}
+				
+				{isActive && (
+					<button 
+						onClick={pauseTimers}
+						className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-4 px-8 rounded-full transition-colors flex items-center space-x-2 text-lg shadow-lg"
+					>
+						<span>⏸️</span>
+						<span>Pause</span>
+					</button>
+				)}
+				
+				<button 
+					onClick={() => dispatch('timer/stopTimers')}
+					className="bg-red-500 hover:bg-red-600 text-white font-bold py-4 px-8 rounded-full transition-colors flex items-center space-x-2 text-lg shadow-lg"
+				>
+					<span>⏹️</span>
+					<span>Stop</span>
+				</button>
+			</div>
+
+			{/* Stats */}
+			<div className="mt-8 pt-6 border-t border-white/20">
+				<div className="grid grid-cols-2 gap-4 text-center text-sm">
+					<div>
+						<div className="font-semibold">Total Time</div>
+						<div className="opacity-75">{Math.floor(totalProgress / 60)}m {totalProgress % 60}s</div>
+					</div>
+					<div>
+						<div className="font-semibold">Remaining</div>
+						<div className="opacity-75">{timers.length - currentIndex} timers</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	)
 }

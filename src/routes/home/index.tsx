@@ -10,10 +10,16 @@ interface Timer {
 }
 const Home = () => {
 	return (
-		<div class={style.home}>
-			<TimersList />
-			<AddTimer />
-			<CountdownTimer />
+		<div className="space-y-8">
+			<div className="grid lg:grid-cols-2 gap-8">
+				<div className="space-y-6">
+					<TimersList />
+					<AddTimer />
+				</div>
+				<div>
+					<CountdownTimer />
+				</div>
+			</div>
 		</div>
 	)
 }
