@@ -2,6 +2,7 @@ import { h, FunctionalComponent } from 'preact'
 import { useState, useEffect } from 'preact/hooks'
 import { useStoreon } from 'storeon/preact'
 import { TimerList } from '../../store/storeTypes'
+import Modal from '../Modal/Modal'
 
 const SavedTimerLists: FunctionalComponent = () => {
 	const { timers, dispatch } = useStoreon('timers')
@@ -145,17 +146,7 @@ const SavedTimerLists: FunctionalComponent = () => {
 		;(event.target as HTMLInputElement).value = ''
 	}
 
-	const handleCreateNewList = () => {
-		if (timers.length > 0) {
-			const confirmClear = confirm('This will clear your current timers. Are you sure you want to create a new list?')
-			if (!confirmClear) return
-		}
-		
-		// Clear current timers by dispatching stopTimers and then clearing the array
-		dispatch('timer/stopTimers')
-		// We need to add a new action to clear all timers
-		dispatch('timer/clearAll')
-	}
+
 
 	const formatTime = (seconds: number) => {
 		const mins = Math.floor(seconds / 60)
@@ -174,13 +165,6 @@ const SavedTimerLists: FunctionalComponent = () => {
 					💾 Saved Timer Lists
 				</h2>
 				<div className="flex flex-wrap gap-2">
-					<button
-						onClick={handleCreateNewList}
-						className="bg-cyan-500 hover:bg-cyan-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-						title="Start fresh with an empty timer list"
-					>
-						✨ New List
-					</button>
 					<button
 						onClick={() => setShowSaveDialog(true)}
 						disabled={timers.length === 0}
@@ -216,108 +200,100 @@ const SavedTimerLists: FunctionalComponent = () => {
 			</div>
 
 			{/* Save Dialog */}
-			{showSaveDialog && (
-				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-					<div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md mx-4">
-						<h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
-							Save Timer List
-						</h3>
-						<form onSubmit={handleSaveList}>
-							<input
-								type="text"
-								value={saveListName}
-								onInput={(e) => setSaveListName((e.target as HTMLInputElement).value)}
-								placeholder="Enter list name..."
-								className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 mb-4"
-								required
-								autoFocus
-							/>
-							<div className="flex space-x-3">
-								<button
-									type="submit"
-									className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg font-medium transition-colors"
-								>
-									Save
-								</button>
-								<button
-									type="button"
-									onClick={() => {
-										setShowSaveDialog(false)
-										setSaveListName('')
-									}}
-									className="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-lg font-medium transition-colors"
-								>
-									Cancel
-								</button>
-							</div>
-						</form>
+			<Modal
+				isOpen={showSaveDialog}
+				onClose={() => {
+					setShowSaveDialog(false)
+					setSaveListName('')
+				}}
+				title="Save Timer List"
+				maxWidth="md"
+			>
+				<form onSubmit={handleSaveList}>
+					<input
+						type="text"
+						value={saveListName}
+						onInput={(e) => setSaveListName((e.target as HTMLInputElement).value)}
+						placeholder="Enter list name..."
+						className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 mb-4"
+						required
+						autoFocus
+					/>
+					<div className="flex space-x-3">
+						<button
+							type="submit"
+							className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg font-medium transition-colors"
+						>
+							Save
+						</button>
+						<button
+							type="button"
+							onClick={() => {
+								setShowSaveDialog(false)
+								setSaveListName('')
+							}}
+							className="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-lg font-medium transition-colors"
+						>
+							Cancel
+						</button>
 					</div>
-				</div>
-			)}
+				</form>
+			</Modal>
 
 			{/* Load Dialog */}
-			{showLoadDialog && (
-				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-					<div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-2xl mx-4 max-h-96 overflow-y-auto">
-						<div className="flex items-center justify-between mb-4">
-							<h3 className="text-lg font-semibold text-gray-800 dark:text-white">
-								Load Timer List
-							</h3>
-							<button
-								onClick={() => setShowLoadDialog(false)}
-								className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-							>
-								✕
-							</button>
-						</div>
-						
-						{savedLists.length === 0 ? (
-							<p className="text-gray-500 dark:text-gray-400 text-center py-8">
-								No saved timer lists found.
-							</p>
-						) : (
-							<div className="space-y-3">
-								{savedLists.map((timerList) => (
-									<div key={timerList.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 flex items-center justify-between">
-										<div className="flex-1">
-											<h4 className="font-medium text-gray-800 dark:text-white">
-												{timerList.name}
-											</h4>
-											<p className="text-sm text-gray-500 dark:text-gray-400">
-												{timerList.timers.length} timers • {formatTime(getTotalDuration(timerList))} total
-											</p>
-											<p className="text-xs text-gray-400 dark:text-gray-500">
-												Saved {new Date(timerList.createdAt).toLocaleDateString()}
-											</p>
-										</div>
-										<div className="flex space-x-2">
-											<button
-												onClick={() => handleLoadList(timerList)}
-												className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors"
-											>
-												Load
-											</button>
-											<button
-												onClick={() => handleExportList(timerList)}
-												className="bg-purple-500 hover:bg-purple-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors"
-												title="Export this list as file"
-											>
-												📤
-											</button>
-											<button
-												onClick={() => handleDeleteList(timerList.id)}
-												className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors"
-											>
-												Delete
-											</button>
-										</div>
+			<Modal
+				isOpen={showLoadDialog}
+				onClose={() => setShowLoadDialog(false)}
+				title="Load Timer List"
+				maxWidth="2xl"
+			>
+				<div className="max-h-96 overflow-y-auto">
+					{savedLists.length === 0 ? (
+						<p className="text-gray-500 dark:text-gray-400 text-center py-8">
+							No saved timer lists found.
+						</p>
+					) : (
+						<div className="space-y-3">
+							{savedLists.map((timerList) => (
+								<div key={timerList.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 flex items-center justify-between">
+									<div className="flex-1">
+										<h4 className="font-medium text-gray-800 dark:text-white">
+											{timerList.name}
+										</h4>
+										<p className="text-sm text-gray-500 dark:text-gray-400">
+											{timerList.timers.length} timers • {formatTime(getTotalDuration(timerList))} total
+										</p>
+										<p className="text-xs text-gray-400 dark:text-gray-500">
+											Saved {new Date(timerList.createdAt).toLocaleDateString()}
+										</p>
 									</div>
-								))}
-							</div>
-						)}
-					</div>
+									<div className="flex space-x-2">
+										<button
+											onClick={() => handleLoadList(timerList)}
+											className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors"
+										>
+											Load
+										</button>
+										<button
+											onClick={() => handleExportList(timerList)}
+											className="bg-purple-500 hover:bg-purple-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors"
+											title="Export this list as file"
+										>
+											📤
+										</button>
+										<button
+											onClick={() => handleDeleteList(timerList.id)}
+											className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors"
+										>
+											Delete
+										</button>
+									</div>
+								</div>
+							))}
+						</div>
+					)}
 				</div>
-			)}
+			</Modal>
 
 			{/* Quick Stats */}
 			<div className="text-sm text-gray-500 dark:text-gray-400">

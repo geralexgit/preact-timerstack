@@ -74,7 +74,7 @@ const CountdownTimer: FunctionalComponent = () => {
 	return (
 		<div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl p-8 text-white">
 			<h2 className="text-2xl font-bold mb-6 text-center">Current Timer</h2>
-			
+
 			{/* Main Timer Display */}
 			<div className="text-center mb-8">
 				<div className="text-6xl font-mono font-bold mb-4 tracking-wider">
@@ -96,20 +96,20 @@ const CountdownTimer: FunctionalComponent = () => {
 						<span>{Math.round(timers[currentIndex]?.progressPrecent || 0)}%</span>
 					</div>
 					<div className="w-full bg-white/20 rounded-full h-3">
-						<div 
+						<div
 							className="bg-white rounded-full h-3 transition-all duration-1000 ease-out"
 							style={`width: ${timers[currentIndex]?.progressPrecent || 0}%`}
 						></div>
 					</div>
 				</div>
-				
+
 				<div>
 					<div className="flex justify-between text-sm mb-2">
 						<span>Total Progress</span>
 						<span>{Math.round(totalProgressPrecent)}%</span>
 					</div>
 					<div className="w-full bg-white/20 rounded-full h-3">
-						<div 
+						<div
 							className="bg-gradient-to-r from-green-400 to-blue-400 rounded-full h-3 transition-all duration-1000 ease-out"
 							style={`width: ${totalProgressPrecent}%`}
 						></div>
@@ -120,7 +120,7 @@ const CountdownTimer: FunctionalComponent = () => {
 			{/* Control Buttons */}
 			<div className="flex justify-center space-x-4">
 				{!isActive && (
-					<button 
+					<button
 						onClick={startTimer}
 						className="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-full transition-colors flex items-center space-x-2 text-lg shadow-lg"
 						disabled={timers.length === 0}
@@ -129,9 +129,9 @@ const CountdownTimer: FunctionalComponent = () => {
 						<span>Start</span>
 					</button>
 				)}
-				
+
 				{isActive && (
-					<button 
+					<button
 						onClick={pauseTimers}
 						className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-4 px-8 rounded-full transition-colors flex items-center space-x-2 text-lg shadow-lg"
 					>
@@ -139,8 +139,8 @@ const CountdownTimer: FunctionalComponent = () => {
 						<span>Pause</span>
 					</button>
 				)}
-				
-				<button 
+
+				<button
 					onClick={() => dispatch('timer/stopTimers')}
 					className="bg-red-500 hover:bg-red-600 text-white font-bold py-4 px-8 rounded-full transition-colors flex items-center space-x-2 text-lg shadow-lg"
 				>
