@@ -33,6 +33,7 @@ export interface TimerList {
 export interface Events {
 	'timer/add': Timer
 	'timer/remove': number
+	'timer/edit': { id: number; name: string; duration: number }
 	'timer/updateIndex': number
 	'timer/decrementTime': void
 	'timer/incrementProgress': number

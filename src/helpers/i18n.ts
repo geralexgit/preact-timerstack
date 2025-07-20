@@ -75,6 +75,11 @@ export interface Translations {
     // Time Format
     timers: string
     timer: string
+    
+    // Edit Timer
+    editTimer: string
+    editTimerTitle: string
+    updateTimer: string
 }
 
 const translations: Record<string, Translations> = {
@@ -152,7 +157,12 @@ const translations: Record<string, Translations> = {
 
         // Time Format
         timers: 'timers',
-        timer: 'timer'
+        timer: 'timer',
+        
+        // Edit Timer
+        editTimer: 'Edit',
+        editTimerTitle: 'Edit Timer',
+        updateTimer: 'Update Timer'
     },
 
     ru: {
@@ -229,7 +239,12 @@ const translations: Record<string, Translations> = {
     
         // Time Format
         timers: 'таймеров',
-        timer: 'таймер'
+        timer: 'таймер',
+        
+        // Edit Timer
+        editTimer: 'Изменить',
+        editTimerTitle: 'Изменить таймер',
+        updateTimer: 'Обновить таймер'
     }
     
 }

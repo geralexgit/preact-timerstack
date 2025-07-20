@@ -4,11 +4,11 @@ import { getLanguage } from './i18n'
 const detectTextLanguage = (text: string): 'ru' | 'en' => {
 	// Check for Cyrillic characters (Russian alphabet)
 	const cyrillicPattern = /[\u0400-\u04FF]/
-	
+
 	if (cyrillicPattern.test(text)) {
 		return 'ru'
 	}
-	
+
 	// Default to English if no Cyrillic characters found
 	return 'en'
 }
@@ -16,12 +16,12 @@ const detectTextLanguage = (text: string): 'ru' | 'en' => {
 // Function to get the best voice for a specific language
 const getVoiceForLanguage = (lang: 'ru' | 'en') => {
 	const voices = speechSynthesis.getVoices()
-	
+
 	if (lang === 'ru') {
 		// Try to find Russian voice
-		return voices.find(voice => 
+		return voices.find(voice =>
 			voice.lang.startsWith('ru') && voice.localService
-		) || voices.find(voice => 
+		) || voices.find(voice =>
 			voice.lang.startsWith('ru')
 		) || null
 	} else {
@@ -36,7 +36,7 @@ const getVoiceForLanguage = (lang: 'ru' | 'en') => {
 
 export const voiseMsg = (msg: string) => {
 	const utterance = new SpeechSynthesisUtterance(msg)
-	
+
 	// Detect the language of the specific timer name
 	const detectedLang = detectTextLanguage(msg)
 
@@ -49,10 +49,10 @@ export const voiseMsg = (msg: string) => {
 
 	if (detectedLang === 'ru') {
 		utterance.lang = 'ru-RU'
-		utterance.rate = 0.8        // Normal speech rate for Russian
+		utterance.rate = 1        // Normal speech rate for Russian
 	} else {
 		utterance.lang = 'en-US'
-		utterance.rate = 0.6        // Slower speech rate for English
+		utterance.rate = 0.8        // Slower speech rate for English
 	}
 
 	// Apply the preferred voice if found

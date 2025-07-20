@@ -105,6 +105,52 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 			}
 		}
 	})
+
+	store.on('timer/edit', (state, payload) => {
+		const { id, name, duration } = payload
+		const updatedTimers = state.timers.map((timer) => {
+			if (timer.id === id) {
+				return {
+					...timer,
+					name,
+					duration,
+					// Reset progress if duration changed
+					progress: timer.duration !== duration ? 0 : timer.progress,
+					progressPrecent: timer.duration !== duration ? 0 : timer.progressPrecent
+				}
+			}
+			return timer
+		})
+		
+		// Recalculate total time after editing timer
+		const totalTime = updatedTimers.reduce(
+			(accumulator, timer) => accumulator + timer.duration,
+			0
+		)
+		
+		// Update current timer's time left if it's the one being edited
+		let newTimeLeft = state.status.timeLeft
+		const currentTimer = updatedTimers[state.status.currentIndex]
+		if (currentTimer && currentTimer.id === id && !state.status.isActive) {
+			newTimeLeft = currentTimer.duration
+		}
+		
+		// Recalculate total progress percentage
+		const totalProgressPrecent = totalTime > 0 ? Math.round(
+			(Number(state.status.totalProgress) / Number(totalTime)) * 100
+		) : 0
+		
+		return {
+			timers: updatedTimers,
+			status: {
+				...state.status,
+				totalTime,
+				timeLeft: newTimeLeft,
+				totalProgressPrecent
+			}
+		}
+	})
+
 	store.on('timer/stopTimers', (state) => {
 		store.dispatch('timer/setIsActive', false)
 		store.dispatch('timer/updateIndex', 0)
