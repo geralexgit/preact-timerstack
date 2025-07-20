@@ -16,7 +16,7 @@ const App = () => (
 				<div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-xl p-3 sm:p-6 mb-16 sm:mb-6">
 					<Home />
 				</div>
-				<ProgressBar />
+				{/* <ProgressBar /> */}
 			</main>
 		</StoreContext.Provider>
 	</div>

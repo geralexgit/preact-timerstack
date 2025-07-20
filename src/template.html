@@ -1,59 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Timer Stack - Productivity Timer App</title>
-		<meta name="description" content="A powerful timer application for productivity, focus sessions, and time management. Create timer sequences, save lists, and boost your productivity.">
-		<meta name="keywords" content="timer, productivity, focus, pomodoro, time management, countdown, work timer">
-		<meta name="author" content="Timer Stack">
-		<meta name="viewport" content="width=device-width,initial-scale=1">
-		
-		<!-- Mobile App Meta Tags -->
-		<meta name="mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="default">
-		<meta name="apple-mobile-web-app-title" content="Timer Stack">
-		<meta name="application-name" content="Timer Stack">
-		<meta name="theme-color" content="#3B82F6">
-		<meta name="msapplication-TileColor" content="#3B82F6">
-		
-		<!-- Open Graph Meta Tags -->
-		<meta property="og:title" content="Timer Stack - Productivity Timer App">
-		<meta property="og:description" content="A powerful timer application for productivity, focus sessions, and time management.">
-		<meta property="og:type" content="website">
-		<meta property="og:image" content="<%= htmlWebpackPlugin.files.publicPath %>assets/icons/apple-touch-icon.png">
-		<meta property="og:site_name" content="Timer Stack">
-		
-		<!-- Twitter Card Meta Tags -->
-		<meta name="twitter:card" content="summary">
-		<meta name="twitter:title" content="Timer Stack - Productivity Timer App">
-		<meta name="twitter:description" content="A powerful timer application for productivity, focus sessions, and time management.">
-		<meta name="twitter:image" content="<%= htmlWebpackPlugin.files.publicPath %>assets/icons/apple-touch-icon.png">
-		
-		<!-- Icons -->
-		<link rel="apple-touch-icon" href="<%= htmlWebpackPlugin.files.publicPath %>assets/icons/apple-touch-icon.png">
-		<link rel="icon" type="image/x-icon" href="<%= htmlWebpackPlugin.files.publicPath %>assets/favicon.ico">
-		
-		<!-- Language Detection Script -->
-		<script>
-			// Detect browser language and set HTML lang attribute
-			(function() {
-				const browserLang = navigator.language.toLowerCase();
-				const htmlElement = document.documentElement;
-				
-				if (browserLang.startsWith('ru')) {
-					htmlElement.lang = 'ru';
-					document.title = 'Стек Таймеров - Приложение для продуктивности';
-					document.querySelector('meta[name="description"]').content = 'Мощное приложение таймера для продуктивности, фокус-сессий и управления временем. Создавайте последовательности таймеров, сохраняйте списки и повышайте продуктивность.';
-				} else {
-					htmlElement.lang = 'en';
-				}
-			})();
-		</script>
-		
-		<% preact.headEnd %>
-	</head>
-	<body>
-		<% preact.bodyEnd %>
-	</body>
+
+<head>
+	<meta charset="utf-8">
+	<title>TimerStack - Productivity Timer App</title>
+	<!-- General SEO Meta Tags -->
+	<meta name="description"
+		content="TimerStack is your smart productivity timer for time management and focus. Create custom timer sequences, use Pomodoro sessions, and stay on track with your goals.">
+	<meta name="keywords"
+		content="productivity timer, Pomodoro app, focus timer, time management, task timer, work timer, time planner, focus sessions">
+	<meta name="author" content="Timer Stack">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+
+	<!-- Mobile App Meta Tags -->
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="default">
+	<meta name="apple-mobile-web-app-title" content="Timer Stack">
+	<meta name="application-name" content="Timer Stack">
+	<meta name="theme-color" content="#3B82F6">
+	<meta name="msapplication-TileColor" content="#3B82F6">
+
+	<!-- Open Graph Meta Tags -->
+	<meta property="og:title" content="TimerStack — Smart Focus & Productivity Timer">
+	<meta property="og:description"
+		content="Boost your focus and time management with Timer Stack. Use Pomodoro technique, create custom timers, and stay productive every day.">
+	<meta property="og:type" content="website">
+	<meta property="og:image" content="<%= htmlWebpackPlugin.files.publicPath %>assets/icons/apple-touch-icon.png">
+	<meta property="og:site_name" content="Timer Stack">
+
+
+	<!-- Twitter Card Meta Tags -->
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="Timer Stack - Productivity Timer App">
+	<meta name="twitter:description"
+		content="A powerful timer application for productivity, focus sessions, and time management.">
+	<meta name="twitter:image" content="<%= htmlWebpackPlugin.files.publicPath %>assets/icons/apple-touch-icon.png">
+
+	<!-- Icons -->
+	<link rel="apple-touch-icon" href="<%= htmlWebpackPlugin.files.publicPath %>assets/icons/apple-touch-icon.png">
+	<link rel="icon" type="image/x-icon" href="<%= htmlWebpackPlugin.files.publicPath %>assets/favicon.ico">
+
+	<!-- Language Detection Script -->
+	<script>
+		// Detect browser language and set HTML lang attribute
+		(function () {
+			const browserLang = navigator.language.toLowerCase();
+			const htmlElement = document.documentElement;
+
+			if (browserLang.startsWith('ru')) {
+				htmlElement.lang = 'ru';
+				document.title = 'TimerStack - Приложение для продуктивности';
+				document.querySelector('meta[name="description"]').content = 'Мощное приложение таймера для продуктивности, фокус-сессий и управления временем. Создавайте последовательности таймеров, сохраняйте списки и повышайте продуктивность.';
+			} else {
+				htmlElement.lang = 'en';
+			}
+		})();
+	</script>
+
+	<% preact.headEnd %>
+</head>
+
+<body>
+	<% preact.bodyEnd %>
+</body>
+
 </html>

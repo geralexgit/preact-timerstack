@@ -25,16 +25,13 @@ const Navbar: FunctionalComponent = () => {
 						<div className="flex items-center space-x-2 sm:space-x-4">
 							<button
 								onClick={() => dispatch('timer/toggleSound')}
-								className={`${soundEnabled
-									? 'bg-red-500 hover:bg-red-600'
-									: 'bg-green-500 hover:bg-green-600'
-									} text-white p-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center`}
+								className={`text-white p-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center`}
 								title={soundEnabled ? t('soundOn') : t('soundOff')}
 							>
 								{soundEnabled ? (
-									<span className="text-lg">🔊</span>
+									<span className="text-lg">🔕</span>									
 								) : (
-									<span className="text-lg">🔇</span>
+									<span className="text-lg">🔔</span>
 								)}
 							</button>
 

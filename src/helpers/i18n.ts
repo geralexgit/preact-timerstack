@@ -80,7 +80,7 @@ export interface Translations {
 const translations: Record<string, Translations> = {
     en: {
         // App Title
-        appTitle: 'Timer Stack',
+        appTitle: 'TimerStack',
 
         // Navbar
         savedLists: 'Saved Lists',
@@ -157,80 +157,81 @@ const translations: Record<string, Translations> = {
 
     ru: {
         // App Title
-        appTitle: 'Стек Таймеров',
-
+        appTitle: 'TimerStack',
+    
         // Navbar
-        savedLists: 'Сохранённые списки',
-        soundOn: 'Звук включён - Нажмите чтобы отключить',
-        soundOff: 'Звук отключён - Нажмите чтобы включить',
-
+        savedLists: 'Списки',
+        soundOn: 'Звук включён — нажми, чтобы выключить',
+        soundOff: 'Звук выключен — нажми, чтобы включить',
+    
         // Timer Queue
-        timerQueue: 'Очередь таймеров',
+        timerQueue: 'Очередь',
         newList: 'Новый',
-        clearCurrentTimers: 'Очистить текущие таймеры?',
-        clearStartNew: 'Очистить и начать новый',
+        clearCurrentTimers: 'Очистить таймеры?',
+        clearStartNew: 'Очистить и начать',
         cancel: 'Отмена',
-        noTimersAdded: 'Таймеры ещё не добавлены. Добавьте свой первый таймер ниже!',
-        removeTimer: 'Удалить таймер',
-
+        noTimersAdded: 'Таймеров пока нет. Добавьте первый!',
+        removeTimer: 'Удалить',
+    
         // Add Timer
-        addNewTimer: 'Добавить новый таймер',
-        timerName: 'Название таймера',
+        addNewTimer: 'Добавить таймер',
+        timerName: 'Название',
         minutes: 'Минуты',
         seconds: 'Секунды',
-        enterValidTimer: 'Введите корректный таймер',
+        enterValidTimer: 'Введите корректное время',
         timerRunning: 'Таймер работает...',
-        addTimer: 'Добавить таймер',
-        timerNamePlaceholder: 'например, Фокус сессия, Перерыв',
-
+        addTimer: 'Добавить',
+        timerNamePlaceholder: 'например: Фокус, Перерыв',
+    
         // Current Timer
-        currentTimer: 'Текущий таймер',
-        queueDuration: 'Длительность очереди:',
-        noTimerSelected: 'Таймер не выбран',
+        currentTimer: 'Сейчас',
+        queueDuration: 'Длительность:',
+        noTimerSelected: 'Нет выбранного таймера',
         start: 'Старт',
         pause: 'Пауза',
         skip: 'Пропустить',
         stop: 'Стоп',
-
+    
         // Progress
-        currentTimerProgress: 'Прогресс текущего таймера',
+        currentTimerProgress: 'Прогресс таймера',
         totalProgress: 'Общий прогресс',
         totalTime: 'Общее время',
         remaining: 'Осталось',
-
+    
         // Saved Lists
-        savedTimerLists: 'Сохранённые списки таймеров',
-        saveCurrent: 'Сохранить текущий',
-        loadList: 'Загрузить список',
-        exportAll: 'Экспорт всех',
-        importFile: 'Импорт файла',
-        saveTimerList: 'Сохранить список таймеров',
-        loadTimerList: 'Загрузить список таймеров',
-        enterListName: 'Введите название списка...',
+        savedTimerLists: 'Сохранённые списки',
+        saveCurrent: 'Сохранить',
+        loadList: 'Загрузить',
+        exportAll: 'Экспорт',
+        importFile: 'Импорт',
+        saveTimerList: 'Сохранить список',
+        loadTimerList: 'Загрузить список',
+        enterListName: 'Имя списка...',
         save: 'Сохранить',
         delete: 'Удалить',
-        noSavedLists: 'Сохранённые списки таймеров не найдены.',
-        savedListsDescription: 'Сохранённых списков таймеров пока нет. Сохраните текущие таймеры для повторного использования!',
-
+        noSavedLists: 'Нет сохранённых списков',
+        savedListsDescription: 'Сохраняйте таймеры для повторного использования.',
+    
         // Modal Actions
         whatWillHappen: 'Что произойдёт:',
-        allTimersRemoved: 'Все текущие таймеры будут удалены',
-        runningTimerStopped: 'Любой работающий таймер будет остановлен',
-        freshEmptyList: 'Вы начнёте с нового, пустого списка таймеров',
-
+        allTimersRemoved: 'Все таймеры будут удалены',
+        runningTimerStopped: 'Идущий таймер остановится',
+        freshEmptyList: 'Будет пустой список',
+    
         // Skip Button Tooltips
-        noTimersAvailable: 'Нет доступных таймеров',
-        startTimerToSkip: 'Запустите таймер чтобы включить пропуск',
-        lastTimer: 'Это последний таймер',
-        skipToNext: 'Пропустить к следующему таймеру',
-
+        noTimersAvailable: 'Нет таймеров',
+        startTimerToSkip: 'Запустите таймер',
+        lastTimer: 'Это последний',
+        skipToNext: 'Пропустить вперёд',
+    
         // Voice Messages
-        allTimersCompleted: 'Все таймеры завершены! Отличная работа!',
-
+        allTimersCompleted: 'Все таймеры завершены! Отлично!',
+    
         // Time Format
         timers: 'таймеров',
         timer: 'таймер'
     }
+    
 }
 
 // Detect browser language and return appropriate translations
