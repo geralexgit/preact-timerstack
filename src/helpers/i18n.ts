@@ -80,6 +80,25 @@ export interface Translations {
     editTimer: string
     editTimerTitle: string
     updateTimer: string
+
+    // Sound Settings
+    soundSettings: string
+    chooseSoundType: string
+    voiceAnnouncement: string
+    pianoChord: string
+    alternativeChord: string
+    preview: string
+    configure: string
+    currentSoundType: string
+    enableSound: string
+    enableSoundDescription: string
+    on: string
+    off: string
+    soundTypeDescription: string
+    voiceDescription: string
+    pianoChordDescription: string
+    alternativeChordDescription: string
+    done: string
 }
 
 const translations: Record<string, Translations> = {
@@ -162,7 +181,26 @@ const translations: Record<string, Translations> = {
         // Edit Timer
         editTimer: 'Edit',
         editTimerTitle: 'Edit Timer',
-        updateTimer: 'Update Timer'
+        updateTimer: 'Update Timer',
+
+        // Sound Settings
+        soundSettings: 'Sound Settings',
+        chooseSoundType: 'Choose sound type for timer completion:',
+        voiceAnnouncement: 'Voice Announcement',
+        pianoChord: 'Piano Chord',
+        alternativeChord: 'Alternative Chord',
+        preview: 'Preview',
+        configure: 'Configure',
+        currentSoundType: 'Current sound type',
+        enableSound: 'Enable Sound',
+        enableSoundDescription: 'Turn sound notifications on or off for timer events',
+        on: 'On',
+        off: 'Off',
+        soundTypeDescription: 'Select how you want to be notified when timers complete',
+        voiceDescription: 'Speaks timer names and completion messages',
+        pianoChordDescription: 'Warm piano chord with triangle waves',
+        alternativeChordDescription: 'Bright electronic chord with sawtooth waves',
+        done: 'Done'
     },
 
     ru: {
@@ -244,7 +282,26 @@ const translations: Record<string, Translations> = {
         // Edit Timer
         editTimer: 'Изменить',
         editTimerTitle: 'Изменить таймер',
-        updateTimer: 'Обновить таймер'
+        updateTimer: 'Обновить таймер',
+
+        // Sound Settings
+        soundSettings: 'Настройки звука',
+        chooseSoundType: 'Выберите тип звука для завершения таймера:',
+        voiceAnnouncement: 'Голосовое объявление',
+        pianoChord: 'Аккорд пианино',
+        alternativeChord: 'Альтернативный аккорд',
+        preview: 'Прослушать',
+        configure: 'Настроить',
+        currentSoundType: 'Текущий тип звука',
+        enableSound: 'Включить звук',
+        enableSoundDescription: 'Включить или выключить звуковые уведомления для таймеров',
+        on: 'Вкл',
+        off: 'Выкл',
+        soundTypeDescription: 'Выберите, как вы хотите получать уведомления о завершении таймеров',
+        voiceDescription: 'Произносит названия таймеров и сообщения о завершении',
+        pianoChordDescription: 'Тёплый аккорд пианино с треугольными волнами',
+        alternativeChordDescription: 'Яркий электронный аккорд с пилообразными волнами',
+        done: 'Готово'
     }
     
 }

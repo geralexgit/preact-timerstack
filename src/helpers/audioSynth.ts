@@ -101,3 +101,64 @@ export const playSuccessChord = () => {
         console.warn('Audio synthesis not supported:', error)
     }
 }
+
+// Second chord option - G Major chord with different envelope
+export const playAlternativeChord = () => {
+    try {
+        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
+
+        // G Major chord (G4, B4, D5) - brighter, more uplifting sound
+        const frequencies = [392.00, 493.88, 587.33]
+
+        frequencies.forEach((frequency, index) => {
+            const oscillator = audioContext.createOscillator()
+            const gainNode = audioContext.createGain()
+
+            oscillator.connect(gainNode)
+            gainNode.connect(audioContext.destination)
+
+            // Use sawtooth for a richer, more electronic sound
+            oscillator.type = 'sawtooth'
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime)
+
+            // Different envelope - quicker attack, longer sustain
+            const now = audioContext.currentTime
+            const attackTime = 0.05
+            const decayTime = 0.2
+            const sustainLevel = 0.4
+            const releaseTime = 1.5
+
+            gainNode.gain.setValueAtTime(0, now)
+            gainNode.gain.linearRampToValueAtTime(0.35, now + attackTime)
+            gainNode.gain.exponentialRampToValueAtTime(sustainLevel, now + attackTime + decayTime)
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + attackTime + decayTime + releaseTime)
+
+            oscillator.start(now)
+            oscillator.stop(now + attackTime + decayTime + releaseTime)
+        })
+
+        setTimeout(() => audioContext.close(), 2500)
+    } catch (error) {
+        console.warn('Audio synthesis not supported:', error)
+        // Same fallback as other functions
+        try {
+            const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
+            const oscillator = audioContext.createOscillator()
+            const gainNode = audioContext.createGain()
+
+            oscillator.connect(gainNode)
+            gainNode.connect(audioContext.destination)
+
+            oscillator.frequency.setValueAtTime(392.00, audioContext.currentTime) // G4
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime)
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5)
+
+            oscillator.start()
+            oscillator.stop(audioContext.currentTime + 0.5)
+
+            setTimeout(() => audioContext.close(), 1000)
+        } catch (fallbackError) {
+            console.warn('Audio not supported')
+        }
+    }
+}

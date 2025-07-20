@@ -4,24 +4,7 @@ import { State, Events } from '../storeTypes'
 
 export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 	store.on('@init', () => ({
-		timers: [
-			{
-				id: 1,
-				name: 'timer 1',
-				duration: 3,
-				isFinished: false,
-				progress: 0,
-				progressPrecent: 0,
-			},
-			{
-				id: 2,
-				name: 'timer 2',
-				duration: 5,
-				isFinished: false,
-				progress: 0,
-				progressPrecent: 0,
-			},
-		],
+		timers: [],
 		status: {
 			currentIndex: 0,
 			timeLeft: 0,
@@ -31,6 +14,7 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 			totalProgressPrecent: 0,
 			isActive: false,
 			soundEnabled: true,
+			soundType: 'voice' as const,
 		},
 	}))
 	store.on('timer/add', (state, payload) => {
@@ -322,8 +306,17 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 		}
 	})
 
+	store.on('timer/setSoundType', (state, payload) => {
+		return {
+			status: {
+				...state.status,
+				soundType: payload
+			}
+		}
+	})
+
 	store.on('timer/skipTimer', (state) => {
-		const { currentIndex, isActive, soundEnabled } = state.status
+		const { currentIndex, isActive, soundEnabled, soundType } = state.status
 		
 		// Only skip if there's an active timer
 		if (!isActive || currentIndex >= state.timers.length) {
@@ -349,10 +342,23 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 			
 			// Announce next timer if sound is enabled
 			if (soundEnabled) {
-				// Import and call voice message function
-				import('../../helpers/voiseMsg').then(({ voiseMsg }) => {
-					voiseMsg(nextTimer.name)
-				})
+				switch (soundType) {
+					case 'voice':
+						import('../../helpers/voiseMsg').then(({ voiseMsg }) => {
+							voiseMsg(nextTimer.name)
+						})
+						break
+					case 'chord1':
+						import('../../helpers/audioSynth').then(({ playCompletionChord }) => {
+							playCompletionChord()
+						})
+						break
+					case 'chord2':
+						import('../../helpers/audioSynth').then(({ playAlternativeChord }) => {
+							playAlternativeChord()
+						})
+						break
+				}
 			}
 			
 			return {

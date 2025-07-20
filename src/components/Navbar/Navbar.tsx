@@ -2,10 +2,12 @@ import { h, FunctionalComponent, Fragment } from 'preact'
 import { useState } from 'preact/hooks'
 import { useStoreon } from 'storeon/preact'
 import SavedTimerLists from '../SavedTimerLists/SavedTimerLists'
+import SoundSettings from '../SoundSettings/SoundSettings'
 import { t } from '../../helpers/i18n'
 
 const Navbar: FunctionalComponent = () => {
 	const [showSavedLists, setShowSavedLists] = useState(false)
+	const [showSoundSettings, setShowSoundSettings] = useState(false)
 	const { status: { soundEnabled }, dispatch } = useStoreon('status')
 
 	return (
@@ -24,15 +26,16 @@ const Navbar: FunctionalComponent = () => {
 						{/* Navigation Items */}
 						<div className="flex items-center space-x-2 sm:space-x-4">
 							<button
-								onClick={() => dispatch('timer/toggleSound')}
-								className={`text-white p-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center`}
-								title={soundEnabled ? t('soundOn') : t('soundOff')}
+								onClick={() => setShowSoundSettings(true)}
+								className={`${
+									soundEnabled 
+										? 'bg-green-500 hover:bg-green-600' 
+										: 'bg-gray-500 hover:bg-gray-600'
+								} text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-2`}
+								title={t('soundSettings')}
 							>
-								{soundEnabled ? (
-									<span className="text-lg">🔕</span>									
-								) : (
-									<span className="text-lg">🔔</span>
-								)}
+								<span>{soundEnabled ? '🔊' : '🔇'}</span>
+								<span className="hidden sm:inline">{t('soundSettings')}</span>
 							</button>
 
 							<button
@@ -46,6 +49,11 @@ const Navbar: FunctionalComponent = () => {
 					</div>
 				</div>
 			</nav>
+
+			{/* Sound Settings Modal */}
+			{showSoundSettings && (
+				<SoundSettings onClose={() => setShowSoundSettings(false)} />
+			)}
 
 			{/* Saved Timer Lists Modal */}
 			{showSavedLists && (

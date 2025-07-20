@@ -2,7 +2,7 @@ import { h, FunctionalComponent } from 'preact'
 import { useEffect } from 'preact/hooks'
 import { useStoreon } from 'storeon/preact'
 import { voiseMsg } from '../../helpers/voiseMsg'
-import { playCompletionChord } from '../../helpers/audioSynth'
+import { playCompletionChord, playAlternativeChord } from '../../helpers/audioSynth'
 import { t } from '../../helpers/i18n'
 
 const CountdownTimer: FunctionalComponent = () => {
@@ -15,6 +15,7 @@ const CountdownTimer: FunctionalComponent = () => {
 			totalProgressPrecent,
 			totalProgress,
 			soundEnabled,
+			soundType,
 		},
 		dispatch,
 	} = useStoreon('timers', 'status')
@@ -26,7 +27,18 @@ const CountdownTimer: FunctionalComponent = () => {
 		dispatch('timer/updateTotalTime')
 		dispatch('timer/setIsActive', true)
 		if (soundEnabled) {
-			voiseMsg(timers[currentIndex].name)
+			// Play sound based on selected type for timer start
+			switch (soundType) {
+				case 'voice':
+					voiseMsg(timers[currentIndex].name)
+					break
+				case 'chord1':
+					playCompletionChord()
+					break
+				case 'chord2':
+					playAlternativeChord()
+					break
+			}
 		}
 	}
 	const pauseTimers = () => {
@@ -54,18 +66,39 @@ const CountdownTimer: FunctionalComponent = () => {
 				dispatch('timer/setTime', timers[currentIndex + 1].duration)
 				dispatch('timer/updateIndex', currentIndex + 1)
 				if (soundEnabled) {
-					voiseMsg(timers[currentIndex + 1].name)
+					// Play sound based on selected type for individual timer completion
+					switch (soundType) {
+						case 'voice':
+							voiseMsg(timers[currentIndex + 1].name)
+							break
+						case 'chord1':
+							playCompletionChord()
+							break
+						case 'chord2':
+							playAlternativeChord()
+							break
+					}
 				}
 			} else {
 				dispatch('timer/isFinished', timers[currentIndex].id)
 				dispatch('timer/stopTimers')
-				// Play completion chord
+				// Play completion sound for all timers finished
 				if (soundEnabled) {
-					playCompletionChord()
+					switch (soundType) {
+						case 'voice':
+							voiseMsg('All timers completed')
+							break
+						case 'chord1':
+							playCompletionChord()
+							break
+						case 'chord2':
+							playAlternativeChord()
+							break
+					}
 				}
 			}
 		}
-	}, [timeLeft, timers, soundEnabled])
+	}, [timeLeft, timers, soundEnabled, soundType])
 
 	useEffect(() => {
 		dispatch('timer/updateTotalTime')
