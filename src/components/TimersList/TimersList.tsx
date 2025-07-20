@@ -34,8 +34,8 @@ const TimersList: FunctionalComponent = () => {
 
 	return (
 		<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
-			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-4">
-				<h2 className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white flex items-center">
+			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+				<h2 className="text-xl font-semibold text-gray-800 dark:text-white flex items-center">
 					📋 Timer Queue
 				</h2>
 				<div className="flex gap-2 self-start sm:self-auto">

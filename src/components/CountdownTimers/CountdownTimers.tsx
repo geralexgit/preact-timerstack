@@ -82,15 +82,15 @@ const CountdownTimer: FunctionalComponent = () => {
 	}
 
 	return (
-		<div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl p-4 sm:p-8 text-white">
-			<h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-center">Current Timer</h2>
+		<div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl p-6 sm:p-8 text-white">
+			<h2 className="text-2xl font-bold mb-6 text-center">Current Timer</h2>
 
 			{/* Main Timer Display */}
-			<div className="text-center mb-6 sm:mb-8">
-				<div className="text-4xl sm:text-6xl font-mono font-bold mb-3 sm:mb-4 tracking-wider">
+			<div className="text-center mb-8">
+				<div className="text-5xl sm:text-6xl font-mono font-bold mb-4 tracking-wider">
 					{formatTime(timeLeft)}
 				</div>
-				<div className="text-lg sm:text-xl font-medium opacity-90 mb-3 px-2">
+				<div className="text-xl font-medium opacity-90 mb-3 px-2">
 					{timers[currentIndex]?.name || 'No timer selected'}
 				</div>
 				<div className="text-sm opacity-75 mb-2">

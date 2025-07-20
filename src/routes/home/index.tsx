@@ -10,10 +10,10 @@ interface Timer {
 }
 const Home = () => {
 	return (
-		<div className="space-y-4 sm:space-y-8">
+		<div className="space-y-6 sm:space-y-8">
 			{/* Main Timer Interface */}
-			<div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
-				<div className="space-y-4 sm:space-y-6 order-2 lg:order-1">
+			<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+				<div className="space-y-6 order-2 lg:order-1">
 					<AddTimer />
 					<TimersList />
 				</div>

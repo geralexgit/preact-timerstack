@@ -10,7 +10,7 @@ const Navbar: FunctionalComponent = () => {
 	return (
 		<>
 			<nav className="bg-white dark:bg-gray-800 shadow-lg border-b border-gray-200 dark:border-gray-700">
-				<div className="container mx-auto px-2 sm:px-4 max-w-4xl">
+				<div className="container mx-auto px-3 sm:px-4 max-w-4xl">
 					<div className="flex items-center justify-between h-16">
 						{/* Logo/Title */}
 						<div className="flex items-center space-x-3">
@@ -24,12 +24,16 @@ const Navbar: FunctionalComponent = () => {
 						<div className="flex items-center space-x-2 sm:space-x-4">
 							<button
 								onClick={() => dispatch('timer/toggleSound')}
-								className={`text-white p-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center`}
-								title={soundEnabled ? 'Sound On - Click to disable' : 'Sound Off - Click to enable'}							>
+								className={`${soundEnabled
+									? 'bg-red-500 hover:bg-red-600'
+									: 'bg-green-500 hover:bg-green-600'
+									} text-white p-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center`}
+								title={soundEnabled ? 'Sound On - Click to disable' : 'Sound Off - Click to enable'}
+							>
 								{soundEnabled ? (
-									<span className="text-lg">🔔</span>
-								) : (									
-									<span className="text-lg">🔕</span>
+									<span className="text-lg">🔊</span>
+								) : (
+									<span className="text-lg">🔇</span>
 								)}
 							</button>
 
