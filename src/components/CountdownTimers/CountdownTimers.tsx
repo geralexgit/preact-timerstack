@@ -16,6 +16,7 @@ const CountdownTimer: FunctionalComponent = () => {
 			totalProgress,
 			soundEnabled,
 			soundType,
+			completionSoundType,
 		},
 		dispatch,
 	} = useStoreon('timers', 'status')
@@ -82,9 +83,9 @@ const CountdownTimer: FunctionalComponent = () => {
 			} else {
 				dispatch('timer/isFinished', timers[currentIndex].id)
 				dispatch('timer/stopTimers')
-				// Play completion sound for all timers finished
+				// Play completion sound for all timers finished using separate completion sound type
 				if (soundEnabled) {
-					switch (soundType) {
+					switch (completionSoundType) {
 						case 'voice':
 							voiseMsg('All timers completed')
 							break
@@ -98,7 +99,7 @@ const CountdownTimer: FunctionalComponent = () => {
 				}
 			}
 		}
-	}, [timeLeft, timers, soundEnabled, soundType])
+	}, [timeLeft, timers, soundEnabled, soundType, completionSoundType])
 
 	useEffect(() => {
 		dispatch('timer/updateTotalTime')

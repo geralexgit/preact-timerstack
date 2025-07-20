@@ -15,6 +15,7 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 			isActive: false,
 			soundEnabled: true,
 			soundType: 'voice' as const,
+			completionSoundType: 'chord1' as const,
 		},
 	}))
 	store.on('timer/add', (state, payload) => {
@@ -311,6 +312,15 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 			status: {
 				...state.status,
 				soundType: payload
+			}
+		}
+	})
+
+	store.on('timer/setCompletionSoundType', (state, payload) => {
+		return {
+			status: {
+				...state.status,
+				completionSoundType: payload
 			}
 		}
 	})

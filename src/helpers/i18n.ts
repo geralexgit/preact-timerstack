@@ -99,6 +99,11 @@ export interface Translations {
     pianoChordDescription: string
     alternativeChordDescription: string
     done: string
+    individualTimerSound: string
+    individualTimerSoundDescription: string
+    allTimersCompletionSound: string
+    allTimersCompletionSoundDescription: string
+    voiceCompletionDescription: string
 }
 
 const translations: Record<string, Translations> = {
@@ -200,7 +205,12 @@ const translations: Record<string, Translations> = {
         voiceDescription: 'Speaks timer names and completion messages',
         pianoChordDescription: 'Warm piano chord with triangle waves',
         alternativeChordDescription: 'Bright electronic chord with sawtooth waves',
-        done: 'Done'
+        done: 'Done',
+        individualTimerSound: 'Individual Timer Sound',
+        individualTimerSoundDescription: 'Sound played when each individual timer completes and moves to the next',
+        allTimersCompletionSound: 'All Timers Completion Sound',
+        allTimersCompletionSoundDescription: 'Sound played when all timers in the queue are finished',
+        voiceCompletionDescription: 'Announces "All timers completed" message'
     },
 
     ru: {
@@ -301,7 +311,12 @@ const translations: Record<string, Translations> = {
         voiceDescription: 'Произносит названия таймеров и сообщения о завершении',
         pianoChordDescription: 'Тёплый аккорд пианино с треугольными волнами',
         alternativeChordDescription: 'Яркий электронный аккорд с пилообразными волнами',
-        done: 'Готово'
+        done: 'Готово',
+        individualTimerSound: 'Звук отдельного таймера',
+        individualTimerSoundDescription: 'Звук при завершении каждого отдельного таймера и переходе к следующему',
+        allTimersCompletionSound: 'Звук завершения всех таймеров',
+        allTimersCompletionSoundDescription: 'Звук при завершении всех таймеров в очереди',
+        voiceCompletionDescription: 'Объявляет сообщение "Все таймеры завершены"'
     }
     
 }
