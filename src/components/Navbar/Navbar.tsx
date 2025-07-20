@@ -1,9 +1,11 @@
 import { h, FunctionalComponent } from 'preact'
 import { useState } from 'preact/hooks'
+import { useStoreon } from 'storeon/preact'
 import SavedTimerLists from '../SavedTimerLists/SavedTimerLists'
 
 const Navbar: FunctionalComponent = () => {
 	const [showSavedLists, setShowSavedLists] = useState(false)
+	const { status: { soundEnabled }, dispatch } = useStoreon('status')
 
 	return (
 		<>
@@ -20,6 +22,17 @@ const Navbar: FunctionalComponent = () => {
 
 						{/* Navigation Items */}
 						<div className="flex items-center space-x-2 sm:space-x-4">
+							<button
+								onClick={() => dispatch('timer/toggleSound')}
+								className={`text-white p-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center`}
+								title={soundEnabled ? 'Sound On - Click to disable' : 'Sound Off - Click to enable'}							>
+								{soundEnabled ? (
+									<span className="text-lg">🔔</span>
+								) : (									
+									<span className="text-lg">🔕</span>
+								)}
+							</button>
+
 							<button
 								onClick={() => setShowSavedLists(true)}
 								className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-2"

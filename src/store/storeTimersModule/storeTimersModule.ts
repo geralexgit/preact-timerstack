@@ -30,6 +30,7 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 			totalProgress: 0,
 			totalProgressPrecent: 0,
 			isActive: false,
+			soundEnabled: true,
 		},
 	}))
 	store.on('timer/add', (state, payload) => {
@@ -37,25 +38,25 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 			...state.timers,
 			{ ...payload, isFinished: false, progress: 0 },
 		]
-		
+
 		// Recalculate total time after adding timer
 		const totalTime = updatedTimers.reduce(
 			(accumulator, timer) => accumulator + timer.duration,
 			0
 		)
-		
+
 		// Recalculate total progress percentage
 		const totalProgressPrecent = totalTime > 0 ? Math.round(
 			(Number(state.status.totalProgress) / Number(totalTime)) * 100
 		) : 0
-		
+
 		// Build new status with updated totals
-		let newStatus = { 
-			...state.status, 
+		let newStatus = {
+			...state.status,
 			totalTime,
 			totalProgressPrecent
 		}
-		
+
 		// If this is the first timer and no timer is active, set it as current
 		if (state.timers.length === 0) {
 			newStatus = {
@@ -64,7 +65,7 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 				timeLeft: payload.duration
 			}
 		}
-		
+
 		return {
 			timers: updatedTimers,
 			status: newStatus
@@ -72,27 +73,27 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 	})
 	store.on('timer/remove', (state, payload) => {
 		const updatedTimers = state.timers.filter((timer) => timer.id !== payload)
-		
+
 		// Recalculate total time after removing timer
 		const totalTime = updatedTimers.reduce(
 			(accumulator, timer) => accumulator + timer.duration,
 			0
 		)
-		
+
 		// Reset current index if it's out of bounds
 		let newCurrentIndex = state.status.currentIndex
 		if (newCurrentIndex >= updatedTimers.length) {
 			newCurrentIndex = Math.max(0, updatedTimers.length - 1)
 		}
-		
+
 		// Set new time left based on current timer
 		const newTimeLeft = updatedTimers.length > 0 ? updatedTimers[newCurrentIndex]?.duration || 0 : 0
-		
+
 		// Recalculate total progress percentage
 		const totalProgressPrecent = totalTime > 0 ? Math.round(
 			(Number(state.status.totalProgress) / Number(totalTime)) * 100
 		) : 0
-		
+
 		return {
 			timers: updatedTimers,
 			status: {
@@ -210,12 +211,12 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 			})),
 			createdAt: Date.now()
 		}
-		
+
 		// Get existing saved lists from localStorage
 		const savedLists = JSON.parse(localStorage.getItem('savedTimerLists') || '[]')
 		savedLists.push(timerList)
 		localStorage.setItem('savedTimerLists', JSON.stringify(savedLists))
-		
+
 		return state
 	})
 
@@ -227,7 +228,7 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 			progressPrecent: 0,
 			isFinished: false
 		}))
-		
+
 		// Reset status for new timers
 		const newStatus = {
 			...state.status,
@@ -237,7 +238,7 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 			totalProgress: 0,
 			totalProgressPrecent: 0,
 		}
-		
+
 		return {
 			timers: loadedTimers,
 			status: newStatus
@@ -248,7 +249,7 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 		const savedLists = JSON.parse(localStorage.getItem('savedTimerLists') || '[]')
 		const filteredLists = savedLists.filter(list => list.id !== listId)
 		localStorage.setItem('savedTimerLists', JSON.stringify(filteredLists))
-		
+
 		return state
 	})
 
@@ -265,4 +266,15 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 			}
 		}
 	})
+
+	store.on('timer/toggleSound', (state) => {
+		return {
+			status: {
+				...state.status,
+				soundEnabled: !state.status.soundEnabled
+			}
+		}
+	})
+
+
 }

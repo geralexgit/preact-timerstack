@@ -2,6 +2,7 @@ import { h, FunctionalComponent } from 'preact'
 import { useEffect } from 'preact/hooks'
 import { useStoreon } from 'storeon/preact'
 import { voiseMsg } from '../../helpers/voiseMsg'
+import { playCompletionChord } from '../../helpers/audioSynth'
 
 const CountdownTimer: FunctionalComponent = () => {
 	const {
@@ -12,6 +13,7 @@ const CountdownTimer: FunctionalComponent = () => {
 			timeLeft,
 			totalProgressPrecent,
 			totalProgress,
+			soundEnabled,
 		},
 		dispatch,
 	} = useStoreon('timers', 'status')
@@ -22,7 +24,9 @@ const CountdownTimer: FunctionalComponent = () => {
 		}
 		dispatch('timer/updateTotalTime')
 		dispatch('timer/setIsActive', true)
-		voiseMsg(timers[currentIndex].name)
+		if (soundEnabled) {
+			voiseMsg(timers[currentIndex].name)
+		}
 	}
 	const pauseTimers = () => {
 		dispatch('timer/setIsActive', false)
@@ -48,13 +52,19 @@ const CountdownTimer: FunctionalComponent = () => {
 				dispatch('timer/isFinished', timers[currentIndex].id)
 				dispatch('timer/setTime', timers[currentIndex + 1].duration)
 				dispatch('timer/updateIndex', currentIndex + 1)
-				voiseMsg(timers[currentIndex + 1].name)
+				if (soundEnabled) {
+					voiseMsg(timers[currentIndex + 1].name)
+				}
 			} else {
 				dispatch('timer/isFinished', timers[currentIndex].id)
 				dispatch('timer/stopTimers')
+				// Play completion chord
+				if (soundEnabled) {
+					playCompletionChord()
+				}
 			}
 		}
-	}, [timeLeft, timers])
+	}, [timeLeft, timers, soundEnabled])
 
 	useEffect(() => {
 		dispatch('timer/updateTotalTime')
@@ -80,14 +90,14 @@ const CountdownTimer: FunctionalComponent = () => {
 				<div className="text-4xl sm:text-6xl font-mono font-bold mb-3 sm:mb-4 tracking-wider">
 					{formatTime(timeLeft)}
 				</div>
-				<div className="text-lg sm:text-xl font-medium opacity-90 mb-2 px-2">
+				<div className="text-lg sm:text-xl font-medium opacity-90 mb-3 px-2">
 					{timers[currentIndex]?.name || 'No timer selected'}
 				</div>
-				<div className="text-sm opacity-75 space-y-1">
-					<div>Timer {currentIndex + 1} of {timers.length}</div>
-					<div>
-						Queue Duration: {formatTime(timers.reduce((total, timer) => total + timer.duration, 0))}
-					</div>
+				<div className="text-sm opacity-75 mb-2">
+					Timer {currentIndex + 1} of {timers.length}
+				</div>
+				<div className="text-sm opacity-90">
+					<span className="font-bold">Queue Duration:</span> {formatTime(timers.reduce((total, timer) => total + timer.duration, 0))}
 				</div>
 			</div>
 
@@ -138,7 +148,9 @@ const CountdownTimer: FunctionalComponent = () => {
 						className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-full transition-colors flex items-center justify-center space-x-2 text-base sm:text-lg shadow-lg"
 						disabled={timers.length === 0}
 					>
-						<span>▶️</span>
+						<svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+							<path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+						</svg>
 						<span>Start</span>
 					</button>
 				)}
@@ -148,7 +160,9 @@ const CountdownTimer: FunctionalComponent = () => {
 						onClick={pauseTimers}
 						className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-full transition-colors flex items-center justify-center space-x-2 text-base sm:text-lg shadow-lg"
 					>
-						<span>⏸️</span>
+						<svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+							<path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+						</svg>
 						<span>Pause</span>
 					</button>
 				)}
@@ -157,7 +171,9 @@ const CountdownTimer: FunctionalComponent = () => {
 					onClick={() => dispatch('timer/stopTimers')}
 					className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-full transition-colors flex items-center justify-center space-x-2 text-base sm:text-lg shadow-lg"
 				>
-					<span>⏹️</span>
+					<svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+						<path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z" clipRule="evenodd" />
+					</svg>
 					<span>Stop</span>
 				</button>
 			</div>

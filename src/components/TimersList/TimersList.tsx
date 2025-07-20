@@ -38,13 +38,15 @@ const TimersList: FunctionalComponent = () => {
 				<h2 className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white flex items-center">
 					📋 Timer Queue
 				</h2>
-				<button
-					onClick={handleNewListClick}
-					className="bg-cyan-500 hover:bg-cyan-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors self-start sm:self-auto"
-					title="Start fresh with an empty timer list"
-				>
-					✨ New List
-				</button>
+				<div className="flex gap-2 self-start sm:self-auto">
+					<button
+						onClick={handleNewListClick}
+						className="bg-cyan-500 hover:bg-cyan-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+						title="Start fresh with an empty timer list"
+					>
+						✨ New
+					</button>
+				</div>
 			</div>
 			{timers?.length === 0 ? (
 				<p className="text-gray-500 dark:text-gray-400 text-center py-8">

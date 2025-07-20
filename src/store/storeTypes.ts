@@ -15,6 +15,7 @@ export interface IStatus {
 	totalTime: number
 	totalProgress: number
 	totalProgressPrecent: number
+	soundEnabled: boolean
 }
 
 export interface State {
@@ -47,4 +48,5 @@ export interface Events {
 	'timer/loadList': TimerList
 	'timer/deleteList': string
 	'timer/clearAll': void
+	'timer/toggleSound': void
 }
