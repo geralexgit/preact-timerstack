@@ -4,7 +4,11 @@ import { useStoreon } from 'storeon/preact'
 import { TimerList } from '../../store/storeTypes'
 import Modal from '../Modal/Modal'
 
-const SavedTimerLists: FunctionalComponent = () => {
+interface SavedTimerListsProps {
+	onClose?: () => void
+}
+
+const SavedTimerLists: FunctionalComponent<SavedTimerListsProps> = ({ onClose }) => {
 	const { timers, dispatch } = useStoreon('timers')
 	const [savedLists, setSavedLists] = useState<TimerList[]>([])
 	const [showSaveDialog, setShowSaveDialog] = useState(false)
@@ -159,45 +163,59 @@ const SavedTimerLists: FunctionalComponent = () => {
 	}
 
 	return (
-		<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
-			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-				<h2 className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white flex items-center">
-					💾 Saved Timer Lists
-				</h2>
-				<div className="flex flex-wrap gap-2">
-					<button
-						onClick={() => setShowSaveDialog(true)}
-						disabled={timers.length === 0}
-						className="bg-green-500 hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-					>
-						💾 Save Current
-					</button>
-					<button
-						onClick={() => setShowLoadDialog(true)}
-						disabled={savedLists.length === 0}
-						className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-					>
-						📂 Load List
-					</button>
-					<button
-						onClick={handleExportAll}
-						disabled={savedLists.length === 0}
-						className="bg-purple-500 hover:bg-purple-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-						title="Export all lists as backup file"
-					>
-						📤 Export All
-					</button>
-					<label className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer">
-						📥 Import File
-						<input
-							type="file"
-							accept=".json"
-							onChange={handleImportFile}
-							className="hidden"
-						/>
-					</label>
+		<>
+			<Modal
+				isOpen={true}
+				onClose={onClose || (() => {})}
+				title="💾 Saved Timer Lists"
+				maxWidth="2xl"
+			>
+				<div className="space-y-6">
+					{/* Action Buttons */}
+					<div className="flex flex-wrap gap-2 justify-center sm:justify-start">
+						<button
+							onClick={() => setShowSaveDialog(true)}
+							disabled={timers.length === 0}
+							className="bg-green-500 hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+						>
+							💾 Save Current
+						</button>
+						<button
+							onClick={() => setShowLoadDialog(true)}
+							disabled={savedLists.length === 0}
+							className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+						>
+							📂 Load List
+						</button>
+						<button
+							onClick={handleExportAll}
+							disabled={savedLists.length === 0}
+							className="bg-purple-500 hover:bg-purple-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+							title="Export all lists as backup file"
+						>
+							📤 Export All
+						</button>
+						<label className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer">
+							📥 Import File
+							<input
+								type="file"
+								accept=".json"
+								onChange={handleImportFile}
+								className="hidden"
+							/>
+						</label>
+					</div>
+
+					{/* Quick Stats */}
+					<div className="text-sm text-gray-500 dark:text-gray-400 text-center">
+						{savedLists.length === 0 ? (
+							<p>No saved timer lists yet. Save your current timers to reuse them later!</p>
+						) : (
+							<p>{savedLists.length} saved timer list{savedLists.length !== 1 ? 's' : ''}</p>
+						)}
+					</div>
 				</div>
-			</div>
+			</Modal>
 
 			{/* Save Dialog */}
 			<Modal
@@ -295,15 +313,7 @@ const SavedTimerLists: FunctionalComponent = () => {
 				</div>
 			</Modal>
 
-			{/* Quick Stats */}
-			<div className="text-sm text-gray-500 dark:text-gray-400">
-				{savedLists.length === 0 ? (
-					<p>No saved timer lists yet. Save your current timers to reuse them later!</p>
-				) : (
-					<p>{savedLists.length} saved timer list{savedLists.length !== 1 ? 's' : ''}</p>
-				)}
-			</div>
-		</div>
+		</>
 	)
 }
 

@@ -83,8 +83,11 @@ const CountdownTimer: FunctionalComponent = () => {
 				<div className="text-lg sm:text-xl font-medium opacity-90 mb-2 px-2">
 					{timers[currentIndex]?.name || 'No timer selected'}
 				</div>
-				<div className="text-sm opacity-75">
-					Timer {currentIndex + 1} of {timers.length}
+				<div className="text-sm opacity-75 space-y-1">
+					<div>Timer {currentIndex + 1} of {timers.length}</div>
+					<div>
+						Queue Duration: {formatTime(timers.reduce((total, timer) => total + timer.duration, 0))}
+					</div>
 				</div>
 			</div>
 
@@ -93,7 +96,12 @@ const CountdownTimer: FunctionalComponent = () => {
 				<div>
 					<div className="flex justify-between text-xs sm:text-sm mb-2">
 						<span>Current Timer Progress</span>
-						<span>{Math.round(timers[currentIndex]?.progressPrecent || 0)}%</span>
+						<div className="text-right">
+							<div>{Math.round(timers[currentIndex]?.progressPrecent || 0)}%</div>
+							<div className="text-xs opacity-75">
+								{formatTime(timers[currentIndex]?.progress || 0)} / {formatTime(timers[currentIndex]?.duration || 0)}
+							</div>
+						</div>
 					</div>
 					<div className="w-full bg-white/20 rounded-full h-2 sm:h-3">
 						<div
@@ -106,7 +114,12 @@ const CountdownTimer: FunctionalComponent = () => {
 				<div>
 					<div className="flex justify-between text-xs sm:text-sm mb-2">
 						<span>Total Progress</span>
-						<span>{Math.round(totalProgressPrecent)}%</span>
+						<div className="text-right">
+							<div>{Math.round(totalProgressPrecent)}%</div>
+							<div className="text-xs opacity-75">
+								{formatTime(totalProgress)} / {formatTime(timers.reduce((total, timer) => total + timer.duration, 0))}
+							</div>
+						</div>
 					</div>
 					<div className="w-full bg-white/20 rounded-full h-2 sm:h-3">
 						<div

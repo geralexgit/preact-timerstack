@@ -33,16 +33,75 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 		},
 	}))
 	store.on('timer/add', (state, payload) => {
+		const updatedTimers = [
+			...state.timers,
+			{ ...payload, isFinished: false, progress: 0 },
+		]
+		
+		// Recalculate total time after adding timer
+		const totalTime = updatedTimers.reduce(
+			(accumulator, timer) => accumulator + timer.duration,
+			0
+		)
+		
+		// Recalculate total progress percentage
+		const totalProgressPrecent = totalTime > 0 ? Math.round(
+			(Number(state.status.totalProgress) / Number(totalTime)) * 100
+		) : 0
+		
+		// Build new status with updated totals
+		let newStatus = { 
+			...state.status, 
+			totalTime,
+			totalProgressPrecent
+		}
+		
+		// If this is the first timer and no timer is active, set it as current
+		if (state.timers.length === 0) {
+			newStatus = {
+				...newStatus,
+				currentIndex: 0,
+				timeLeft: payload.duration
+			}
+		}
+		
 		return {
-			timers: [
-				...state.timers,
-				{ ...payload, isFinished: false, progress: 0 },
-			],
+			timers: updatedTimers,
+			status: newStatus
 		}
 	})
 	store.on('timer/remove', (state, payload) => {
+		const updatedTimers = state.timers.filter((timer) => timer.id !== payload)
+		
+		// Recalculate total time after removing timer
+		const totalTime = updatedTimers.reduce(
+			(accumulator, timer) => accumulator + timer.duration,
+			0
+		)
+		
+		// Reset current index if it's out of bounds
+		let newCurrentIndex = state.status.currentIndex
+		if (newCurrentIndex >= updatedTimers.length) {
+			newCurrentIndex = Math.max(0, updatedTimers.length - 1)
+		}
+		
+		// Set new time left based on current timer
+		const newTimeLeft = updatedTimers.length > 0 ? updatedTimers[newCurrentIndex]?.duration || 0 : 0
+		
+		// Recalculate total progress percentage
+		const totalProgressPrecent = totalTime > 0 ? Math.round(
+			(Number(state.status.totalProgress) / Number(totalTime)) * 100
+		) : 0
+		
 		return {
-			timers: state.timers.filter((timer) => timer.id !== payload),
+			timers: updatedTimers,
+			status: {
+				...state.status,
+				totalTime,
+				currentIndex: newCurrentIndex,
+				timeLeft: state.status.isActive ? state.status.timeLeft : newTimeLeft,
+				totalProgressPrecent
+			}
 		}
 	})
 	store.on('timer/stopTimers', (state) => {
