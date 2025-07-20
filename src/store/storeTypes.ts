@@ -49,4 +49,5 @@ export interface Events {
 	'timer/deleteList': string
 	'timer/clearAll': void
 	'timer/toggleSound': void
+	'timer/skipTimer': void
 }

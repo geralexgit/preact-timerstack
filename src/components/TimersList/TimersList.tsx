@@ -1,11 +1,13 @@
 import { h, FunctionalComponent } from 'preact'
-import { useState } from 'preact/hooks'
+import { useState, useEffect, useRef } from 'preact/hooks'
 import { useStoreon } from 'storeon/preact'
 import Modal from '../Modal/Modal'
 
 const TimersList: FunctionalComponent = () => {
-	const { timers, dispatch } = useStoreon('timers')
+	const { timers, status: { currentIndex, isActive }, dispatch } = useStoreon('timers', 'status')
 	const [showNewListModal, setShowNewListModal] = useState(false)
+	const scrollContainerRef = useRef<HTMLDivElement>(null)
+	const activeTimerRef = useRef<HTMLLIElement>(null)
 
 	const removeTimer = (id: number) => {
 		dispatch('timer/remove', id)
@@ -32,6 +34,40 @@ const TimersList: FunctionalComponent = () => {
 		return `${mins}:${secs.toString().padStart(2, '0')}`
 	}
 
+	// Auto-scroll to active timer when currentIndex changes
+	useEffect(() => {
+		if (activeTimerRef.current && scrollContainerRef.current) {
+			const activeElement = activeTimerRef.current
+			const container = scrollContainerRef.current
+
+			// Get the position of the active timer relative to the container
+			const containerRect = container.getBoundingClientRect()
+			const activeRect = activeElement.getBoundingClientRect()
+
+			// Check if the active timer is visible in the container
+			const isVisible = (
+				activeRect.top >= containerRect.top &&
+				activeRect.bottom <= containerRect.bottom
+			)
+
+			// If not visible, scroll to make it visible
+			if (!isVisible) {
+				const containerScrollTop = container.scrollTop
+				const activeOffsetTop = activeElement.offsetTop
+				const containerHeight = container.clientHeight
+				const activeHeight = activeElement.clientHeight
+
+				// Calculate the scroll position to center the active timer
+				const scrollTo = activeOffsetTop - (containerHeight / 2) + (activeHeight / 2)
+
+				container.scrollTo({
+					top: Math.max(0, scrollTo),
+					behavior: 'smooth'
+				})
+			}
+		}
+	}, [currentIndex, isActive])
+
 	return (
 		<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
 			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
@@ -48,34 +84,70 @@ const TimersList: FunctionalComponent = () => {
 					</button>
 				</div>
 			</div>
-			{timers?.length === 0 ? (
-				<p className="text-gray-500 dark:text-gray-400 text-center py-8">
-					No timers added yet. Add your first timer below!
-				</p>
-			) : (
-				<ul className="space-y-3">
-					{timers?.map((timer, index) => (
-						<li key={timer.id} className="bg-white dark:bg-gray-600 rounded-lg p-4 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
-							<div className="flex items-center space-x-3">
-								<span className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm font-medium px-2 py-1 rounded-full">
-									#{index + 1}
-								</span>
-								<div>
-									<h3 className="font-medium text-gray-800 dark:text-white">{timer.name}</h3>
-									<p className="text-sm text-gray-500 dark:text-gray-400">{formatTime(timer.duration)}</p>
-								</div>
-							</div>
-							<button
-								onClick={() => removeTimer(timer.id)}
-								className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 p-2 rounded-lg transition-colors"
-								title="Remove timer"
-							>
-								🗑️
-							</button>
-						</li>
-					))}
-				</ul>
-			)}
+			<div ref={scrollContainerRef} className="max-h-45 overflow-y-auto overflow-x-hidden">
+				{timers?.length === 0 ? (
+					<p className="text-gray-500 dark:text-gray-400 text-center py-8">
+						No timers added yet. Add your first timer below!
+					</p>
+				) : (
+					<ul className="space-y-2 pr-2">
+						{timers?.map((timer, index) => {
+							const isCurrentTimer = index === currentIndex
+							const isActiveTimer = isCurrentTimer && isActive
+
+							return (
+								<li
+									key={timer.id}
+									ref={isCurrentTimer ? activeTimerRef : null}
+									className={`${isCurrentTimer
+										? isActiveTimer
+											? 'bg-green-100 dark:bg-green-900/30 border-2 border-green-300 dark:border-green-700'
+											: 'bg-blue-100 dark:bg-blue-900/30 border-2 border-blue-300 dark:border-blue-700'
+										: 'bg-white dark:bg-gray-600 border-2 border-transparent'
+										} rounded-lg px-3 py-2 flex items-center justify-between shadow-sm hover:shadow-md transition-all`}
+								>
+									<div className="flex items-center space-x-3 min-w-0 flex-1">
+										<span className={`${isCurrentTimer
+											? isActiveTimer
+												? 'bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200'
+												: 'bg-blue-200 dark:bg-blue-800 text-blue-800 dark:text-blue-200'
+											: 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200'
+											} text-xs font-medium px-2 py-1 rounded-full flex-shrink-0 flex items-center space-x-1`}>
+											{isActiveTimer && <span className="animate-pulse">▶️</span>}
+											<span>#{index + 1}</span>
+										</span>
+										<div className="min-w-0 flex-1">
+											<span className={`font-medium truncate mr-2 ${isCurrentTimer
+												? isActiveTimer
+													? 'text-green-800 dark:text-green-200'
+													: 'text-blue-800 dark:text-blue-200'
+												: 'text-gray-800 dark:text-white'
+												}`}>
+												{timer.name}
+											</span>
+											<span className={`text-sm ${isCurrentTimer
+												? isActiveTimer
+													? 'text-green-600 dark:text-green-300'
+													: 'text-blue-600 dark:text-blue-300'
+												: 'text-gray-500 dark:text-gray-400'
+												}`}>
+												({formatTime(timer.duration)})
+											</span>
+										</div>
+									</div>
+									<button
+										onClick={() => removeTimer(timer.id)}
+										className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 p-1 rounded transition-colors flex-shrink-0 ml-2"
+										title="Remove timer"
+									>
+										🗑️
+									</button>
+								</li>
+							)
+						})}
+					</ul>
+				)}
+			</div>
 
 			{/* New List Confirmation Modal */}
 			<Modal

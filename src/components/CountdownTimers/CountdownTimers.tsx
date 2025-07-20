@@ -142,7 +142,7 @@ const CountdownTimer: FunctionalComponent = () => {
 
 			{/* Control Buttons */}
 			<div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 sm:space-x-0">
-				{!isActive && (
+				{!isActive ? (
 					<button
 						onClick={startTimer}
 						className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-full transition-colors flex items-center justify-center space-x-2 text-base sm:text-lg shadow-lg"
@@ -153,9 +153,7 @@ const CountdownTimer: FunctionalComponent = () => {
 						</svg>
 						<span>Start</span>
 					</button>
-				)}
-
-				{isActive && (
+				) : (
 					<button
 						onClick={pauseTimers}
 						className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-full transition-colors flex items-center justify-center space-x-2 text-base sm:text-lg shadow-lg"
@@ -166,6 +164,30 @@ const CountdownTimer: FunctionalComponent = () => {
 						<span>Pause</span>
 					</button>
 				)}
+				
+				<button
+					onClick={() => dispatch('timer/skipTimer')}
+					className={`${
+						!isActive || currentIndex >= timers.length - 1 || timers.length === 0
+							? 'bg-gray-400 cursor-not-allowed'
+							: 'bg-orange-500 hover:bg-orange-600'
+					} text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-full transition-colors flex items-center justify-center space-x-2 text-base sm:text-lg shadow-lg`}
+					disabled={!isActive || currentIndex >= timers.length - 1 || timers.length === 0}
+					title={
+						timers.length === 0 
+							? "No timers available"
+							: !isActive 
+								? "Start timer to enable skip"
+								: currentIndex >= timers.length - 1 
+									? "This is the last timer" 
+									: "Skip to next timer"
+					}
+				>
+					<svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+						<path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clipRule="evenodd" />
+					</svg>
+					<span>Skip</span>
+				</button>
 
 				<button
 					onClick={() => dispatch('timer/stopTimers')}

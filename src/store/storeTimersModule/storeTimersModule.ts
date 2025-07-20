@@ -276,5 +276,58 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 		}
 	})
 
+	store.on('timer/skipTimer', (state) => {
+		const { currentIndex, isActive, soundEnabled } = state.status
+		
+		// Only skip if there's an active timer
+		if (!isActive || currentIndex >= state.timers.length) {
+			return state
+		}
+		
+		// Mark current timer as finished
+		const updatedTimers = state.timers.map((timer, index) => {
+			if (index === currentIndex) {
+				return {
+					...timer,
+					isFinished: true,
+					progress: timer.duration,
+					progressPrecent: 100
+				}
+			}
+			return timer
+		})
+		
+		// Move to next timer or stop if this was the last one
+		if (currentIndex < state.timers.length - 1) {
+			const nextTimer = updatedTimers[currentIndex + 1]
+			
+			// Announce next timer if sound is enabled
+			if (soundEnabled) {
+				// Import and call voice message function
+				import('../../helpers/voiseMsg').then(({ voiseMsg }) => {
+					voiseMsg(nextTimer.name)
+				})
+			}
+			
+			return {
+				timers: updatedTimers,
+				status: {
+					...state.status,
+					currentIndex: currentIndex + 1,
+					timeLeft: nextTimer.duration
+				}
+			}
+		} else {
+			// This was the last timer, stop the sequence
+			return {
+				timers: updatedTimers,
+				status: {
+					...state.status,
+					isActive: false
+				}
+			}
+		}
+	})
+
 
 }
