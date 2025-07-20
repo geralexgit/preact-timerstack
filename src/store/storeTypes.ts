@@ -15,6 +15,7 @@ export interface IStatus {
 	totalTime: number
 	totalProgress: number
 	totalProgressPrecent: number
+	soundEnabled: boolean
 }
 
 export interface State {
@@ -22,9 +23,17 @@ export interface State {
 	status: IStatus
 }
 
+export interface TimerList {
+	id: string
+	name: string
+	timers: Omit<Timer, 'progress' | 'progressPrecent' | 'isFinished'>[]
+	createdAt: number
+}
+
 export interface Events {
 	'timer/add': Timer
 	'timer/remove': number
+	'timer/edit': { id: number; name: string; duration: number }
 	'timer/updateIndex': number
 	'timer/decrementTime': void
 	'timer/incrementProgress': number
@@ -36,4 +45,10 @@ export interface Events {
 	'timer/incrementTotalProgress': void
 	'timer/updateTotalTime': void
 	'timer/resetTotalProgress': void
+	'timer/saveList': { name: string }
+	'timer/loadList': TimerList
+	'timer/deleteList': string
+	'timer/clearAll': void
+	'timer/toggleSound': void
+	'timer/skipTimer': void
 }

@@ -30,21 +30,127 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 			totalProgress: 0,
 			totalProgressPrecent: 0,
 			isActive: false,
+			soundEnabled: true,
 		},
 	}))
 	store.on('timer/add', (state, payload) => {
+		const updatedTimers = [
+			...state.timers,
+			{ ...payload, isFinished: false, progress: 0 },
+		]
+
+		// Recalculate total time after adding timer
+		const totalTime = updatedTimers.reduce(
+			(accumulator, timer) => accumulator + timer.duration,
+			0
+		)
+
+		// Recalculate total progress percentage
+		const totalProgressPrecent = totalTime > 0 ? Math.round(
+			(Number(state.status.totalProgress) / Number(totalTime)) * 100
+		) : 0
+
+		// Build new status with updated totals
+		let newStatus = {
+			...state.status,
+			totalTime,
+			totalProgressPrecent
+		}
+
+		// If this is the first timer and no timer is active, set it as current
+		if (state.timers.length === 0) {
+			newStatus = {
+				...newStatus,
+				currentIndex: 0,
+				timeLeft: payload.duration
+			}
+		}
+
 		return {
-			timers: [
-				...state.timers,
-				{ ...payload, isFinished: false, progress: 0 },
-			],
+			timers: updatedTimers,
+			status: newStatus
 		}
 	})
 	store.on('timer/remove', (state, payload) => {
+		const updatedTimers = state.timers.filter((timer) => timer.id !== payload)
+
+		// Recalculate total time after removing timer
+		const totalTime = updatedTimers.reduce(
+			(accumulator, timer) => accumulator + timer.duration,
+			0
+		)
+
+		// Reset current index if it's out of bounds
+		let newCurrentIndex = state.status.currentIndex
+		if (newCurrentIndex >= updatedTimers.length) {
+			newCurrentIndex = Math.max(0, updatedTimers.length - 1)
+		}
+
+		// Set new time left based on current timer
+		const newTimeLeft = updatedTimers.length > 0 ? updatedTimers[newCurrentIndex]?.duration || 0 : 0
+
+		// Recalculate total progress percentage
+		const totalProgressPrecent = totalTime > 0 ? Math.round(
+			(Number(state.status.totalProgress) / Number(totalTime)) * 100
+		) : 0
+
 		return {
-			timers: state.timers.filter((timer) => timer.id !== payload),
+			timers: updatedTimers,
+			status: {
+				...state.status,
+				totalTime,
+				currentIndex: newCurrentIndex,
+				timeLeft: state.status.isActive ? state.status.timeLeft : newTimeLeft,
+				totalProgressPrecent
+			}
 		}
 	})
+
+	store.on('timer/edit', (state, payload) => {
+		const { id, name, duration } = payload
+		const updatedTimers = state.timers.map((timer) => {
+			if (timer.id === id) {
+				return {
+					...timer,
+					name,
+					duration,
+					// Reset progress if duration changed
+					progress: timer.duration !== duration ? 0 : timer.progress,
+					progressPrecent: timer.duration !== duration ? 0 : timer.progressPrecent
+				}
+			}
+			return timer
+		})
+		
+		// Recalculate total time after editing timer
+		const totalTime = updatedTimers.reduce(
+			(accumulator, timer) => accumulator + timer.duration,
+			0
+		)
+		
+		// Update current timer's time left if it's the one being edited
+		let newTimeLeft = state.status.timeLeft
+		const currentTimer = updatedTimers[state.status.currentIndex]
+		if (currentTimer && currentTimer.id === id && !state.status.isActive) {
+			newTimeLeft = currentTimer.duration
+		}
+		
+		// Recalculate total progress percentage
+		const totalProgressPrecent = totalTime > 0 ? Math.round(
+			(Number(state.status.totalProgress) / Number(totalTime)) * 100
+		) : 0
+		
+		return {
+			timers: updatedTimers,
+			status: {
+				...state.status,
+				totalTime,
+				timeLeft: newTimeLeft,
+				totalProgressPrecent
+			}
+		}
+	})
+
 	store.on('timer/stopTimers', (state) => {
 		store.dispatch('timer/setIsActive', false)
 		store.dispatch('timer/updateIndex', 0)
@@ -138,4 +244,136 @@ export const storeTimersModule: StoreonModule<State, Events> = (store) => {
 			},
 		}
 	})
+
+	// Save/Load Timer Lists
+	store.on('timer/saveList', (state, payload) => {
+		const timerList = {
+			id: Date.now().toString(),
+			name: payload.name,
+			timers: state.timers.map(timer => ({
+				id: timer.id,
+				name: timer.name,
+				duration: timer.duration
+			})),
+			createdAt: Date.now()
+		}
+
+		// Get existing saved lists from localStorage
+		const savedLists = JSON.parse(localStorage.getItem('savedTimerLists') || '[]')
+		savedLists.push(timerList)
+		localStorage.setItem('savedTimerLists', JSON.stringify(savedLists))
+
+		return state
+	})
+
+	store.on('timer/loadList', (state, payload) => {
+		// Convert saved timers to full timer objects
+		const loadedTimers = payload.timers.map(timer => ({
+			...timer,
+			progress: 0,
+			progressPrecent: 0,
+			isFinished: false
+		}))
+
+		// Reset status for new timers
+		const newStatus = {
+			...state.status,
+			currentIndex: 0,
+			timeLeft: loadedTimers.length > 0 ? loadedTimers[0].duration : 0,
+			isActive: false,
+			totalProgress: 0,
+			totalProgressPrecent: 0,
+		}
+
+		return {
+			timers: loadedTimers,
+			status: newStatus
+		}
+	})
+
+	store.on('timer/deleteList', (state, listId) => {
+		const savedLists = JSON.parse(localStorage.getItem('savedTimerLists') || '[]')
+		const filteredLists = savedLists.filter(list => list.id !== listId)
+		localStorage.setItem('savedTimerLists', JSON.stringify(filteredLists))
+
+		return state
+	})
+
+	store.on('timer/clearAll', (state) => {
+		return {
+			timers: [],
+			status: {
+				...state.status,
+				currentIndex: 0,
+				timeLeft: 0,
+				isActive: false,
+				totalProgress: 0,
+				totalProgressPrecent: 0,
+			}
+		}
+	})
+
+	store.on('timer/toggleSound', (state) => {
+		return {
+			status: {
+				...state.status,
+				soundEnabled: !state.status.soundEnabled
+			}
+		}
+	})
+
+	store.on('timer/skipTimer', (state) => {
+		const { currentIndex, isActive, soundEnabled } = state.status
+		
+		// Only skip if there's an active timer
+		if (!isActive || currentIndex >= state.timers.length) {
+			return state
+		}
+		
+		// Mark current timer as finished
+		const updatedTimers = state.timers.map((timer, index) => {
+			if (index === currentIndex) {
+				return {
+					...timer,
+					isFinished: true,
+					progress: timer.duration,
+					progressPrecent: 100
+				}
+			}
+			return timer
+		})
+		
+		// Move to next timer or stop if this was the last one
+		if (currentIndex < state.timers.length - 1) {
+			const nextTimer = updatedTimers[currentIndex + 1]
+			
+			// Announce next timer if sound is enabled
+			if (soundEnabled) {
+				// Import and call voice message function
+				import('../../helpers/voiseMsg').then(({ voiseMsg }) => {
+					voiseMsg(nextTimer.name)
+				})
+			}
+			
+			return {
+				timers: updatedTimers,
+				status: {
+					...state.status,
+					currentIndex: currentIndex + 1,
+					timeLeft: nextTimer.duration
+				}
+			}
+		} else {
+			// This was the last timer, stop the sequence
+			return {
+				timers: updatedTimers,
+				status: {
+					...state.status,
+					isActive: false
+				}
+			}
+		}
+	})
+
+
 }

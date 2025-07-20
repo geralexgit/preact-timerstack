@@ -1,6 +1,7 @@
 import { h, FunctionalComponent } from 'preact'
 import { useState } from 'preact/hooks'
 import { useStoreon } from 'storeon/preact'
+import { t } from '../../helpers/i18n'
 
 const AddTimer: FunctionalComponent = () => {
 	const {
@@ -18,13 +19,27 @@ const AddTimer: FunctionalComponent = () => {
 	const onSubmit = (e) => {
 		e.preventDefault()
 		const id = Date.now()
-		const duration =
-			Number(formValues.minutes) * 60 + Number(formValues.seconds)
-		const name = formValues.name
-		if (duration <= 0) {
-			alert('timer is empty')
+		const minutes = Math.max(0, Math.floor(Number(formValues.minutes) || 0))
+		const seconds = Math.max(0, Math.floor(Number(formValues.seconds) || 0))
+		const duration = minutes * 60 + seconds
+		const name = (formValues.name as string).trim()
+
+		// Validation
+		if (!name) {
+			alert('Please enter a timer name')
 			return
 		}
+
+		if (duration <= 0) {
+			alert('Timer duration must be greater than 0 seconds')
+			return
+		}
+
+		if (duration > 5999) { // 99 minutes 59 seconds
+			alert('Timer duration cannot exceed 99 minutes and 59 seconds')
+			return
+		}
+
 		const updatedValues = {
 			id,
 			duration,
@@ -43,41 +58,118 @@ const AddTimer: FunctionalComponent = () => {
 			value,
 			dataset: { name },
 		} = e.target
+
+		let processedValue = value
+
+		// Handle numeric inputs with validation
+		if (name === 'minutes' || name === 'seconds') {
+			// Remove any non-numeric characters except for empty string
+			processedValue = value.replace(/[^0-9]/g, '')
+
+			// Convert to number and apply constraints
+			let numValue = processedValue === '' ? 0 : parseInt(processedValue, 10)
+
+			if (name === 'minutes') {
+				// Limit minutes to 0-99
+				numValue = Math.min(Math.max(0, numValue), 99)
+			} else if (name === 'seconds') {
+				// Limit seconds to 0-59
+				numValue = Math.min(Math.max(0, numValue), 59)
+			}
+
+			processedValue = numValue
+		} else if (name === 'name') {
+			// Trim whitespace and limit length
+			processedValue = value.slice(0, 50) // Limit name to 50 characters
+		}
+
 		setFormValues({
 			...formValues,
-			[`${name}`]: value,
+			[`${name}`]: processedValue,
 		})
 	}
 
+	// Check if form is valid
+	const isFormValid = () => {
+		const minutes = Math.max(0, Math.floor(Number(formValues.minutes) || 0))
+		const seconds = Math.max(0, Math.floor(Number(formValues.seconds) || 0))
+		const duration = minutes * 60 + seconds
+		const name = (formValues.name as string).trim()
+
+		return name.length > 0 && duration > 0
+	}
+
 	return (
-		<form onSubmit={onSubmit}>
-			<input
-				type="text"
-				value={formValues?.name}
-				data-name="name"
-				onInput={onInput}
-				required
-			/>
-			<input
-				type="number"
-				value={formValues?.minutes}
-				defaultValue="0"
-				data-name="minutes"
-				onInput={onInput}
-				max={99}
-			/>
-			<input
-				type="number"
-				value={formValues?.seconds}
-				data-name="seconds"
-				defaultValue="0"
-				onInput={onInput}
-				max={60}
-			/>
-			<button type="submit" disabled={isActive}>
-				Add
-			</button>
-		</form>
+		<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
+			<h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+				➕ {t('addNewTimer')}
+			</h2>
+			<form onSubmit={onSubmit} className="space-y-4">
+				<div>
+					<label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+						{t('timerName')}
+					</label>
+					<input
+						type="text"
+						value={formValues?.name}
+						data-name="name"
+						onInput={onInput}
+						placeholder={t('timerNamePlaceholder')}
+						className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+						required
+					/>
+				</div>
+
+				<div className="grid grid-cols-2 gap-4">
+					<div>
+						<label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+							{t('minutes')}
+						</label>
+						<input
+							type="number"
+							value={formValues?.minutes}
+							defaultValue="0"
+							data-name="minutes"
+							onInput={onInput}
+							max={99}
+							min={0}
+							className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-600 text-gray-900 dark:text-white"
+						/>
+					</div>
+					<div>
+						<label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+							{t('seconds')}
+						</label>
+						<input
+							type="number"
+							value={formValues?.seconds}
+							data-name="seconds"
+							defaultValue="0"
+							onInput={onInput}
+							max={59}
+							min={0}
+							className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-600 text-gray-900 dark:text-white"
+						/>
+					</div>
+				</div>
+
+				<button
+					type="submit"
+					disabled={isActive || !isFormValid()}
+					className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-3 px-6 rounded-lg transition-colors flex items-center justify-center space-x-2"
+				>
+					<span>➕</span>
+					<span>
+						{isActive
+							? t('timerRunning')
+							: !isFormValid()
+								? t('enterValidTimer')
+								: t('addTimer')
+						}
+					</span>
+				</button>
+			</form>
+		</div>
 	)
 }
 
