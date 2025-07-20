@@ -3,6 +3,7 @@ import { useEffect } from 'preact/hooks'
 import { useStoreon } from 'storeon/preact'
 import { voiseMsg } from '../../helpers/voiseMsg'
 import { playCompletionChord } from '../../helpers/audioSynth'
+import { t } from '../../helpers/i18n'
 
 const CountdownTimer: FunctionalComponent = () => {
 	const {
@@ -83,7 +84,7 @@ const CountdownTimer: FunctionalComponent = () => {
 
 	return (
 		<div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl p-6 sm:p-8 text-white">
-			<h2 className="text-2xl font-bold mb-6 text-center">Current Timer</h2>
+			<h2 className="text-2xl font-bold mb-6 text-center">{t('currentTimer')}</h2>
 
 			{/* Main Timer Display */}
 			<div className="text-center mb-8">
@@ -91,13 +92,13 @@ const CountdownTimer: FunctionalComponent = () => {
 					{formatTime(timeLeft)}
 				</div>
 				<div className="text-xl font-medium opacity-90 mb-3 px-2">
-					{timers[currentIndex]?.name || 'No timer selected'}
+					{timers[currentIndex]?.name || t('noTimerSelected')}
 				</div>
 				<div className="text-sm opacity-75 mb-2">
-					Timer {currentIndex + 1} of {timers.length}
+					{t('timer')} {currentIndex + 1} of {timers.length}
 				</div>
 				<div className="text-sm opacity-90">
-					<span className="font-bold">Queue Duration:</span> {formatTime(timers.reduce((total, timer) => total + timer.duration, 0))}
+					<span className="font-bold">{t('queueDuration')}</span> {formatTime(timers.reduce((total, timer) => total + timer.duration, 0))}
 				</div>
 			</div>
 
@@ -105,7 +106,7 @@ const CountdownTimer: FunctionalComponent = () => {
 			<div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
 				<div>
 					<div className="flex justify-between text-xs sm:text-sm mb-2">
-						<span>Current Timer Progress</span>
+						<span>{t('currentTimerProgress')}</span>
 						<div className="text-right">
 							<div>{Math.round(timers[currentIndex]?.progressPrecent || 0)}%</div>
 							<div className="text-xs opacity-75">
@@ -123,7 +124,7 @@ const CountdownTimer: FunctionalComponent = () => {
 
 				<div>
 					<div className="flex justify-between text-xs sm:text-sm mb-2">
-						<span>Total Progress</span>
+						<span>{t('totalProgress')}</span>
 						<div className="text-right">
 							<div>{Math.round(totalProgressPrecent)}%</div>
 							<div className="text-xs opacity-75">
@@ -151,7 +152,7 @@ const CountdownTimer: FunctionalComponent = () => {
 						<svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
 							<path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
 						</svg>
-						<span>Start</span>
+						<span>{t('start')}</span>
 					</button>
 				) : (
 					<button
@@ -161,7 +162,7 @@ const CountdownTimer: FunctionalComponent = () => {
 						<svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
 							<path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
 						</svg>
-						<span>Pause</span>
+						<span>{t('pause')}</span>
 					</button>
 				)}
 				
@@ -175,18 +176,18 @@ const CountdownTimer: FunctionalComponent = () => {
 					disabled={!isActive || currentIndex >= timers.length - 1 || timers.length === 0}
 					title={
 						timers.length === 0 
-							? "No timers available"
+							? t('noTimersAvailable')
 							: !isActive 
-								? "Start timer to enable skip"
+								? t('startTimerToSkip')
 								: currentIndex >= timers.length - 1 
-									? "This is the last timer" 
-									: "Skip to next timer"
+									? t('lastTimer')
+									: t('skipToNext')
 					}
 				>
 					<svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
 						<path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clipRule="evenodd" />
 					</svg>
-					<span>Skip</span>
+					<span>{t('skip')}</span>
 				</button>
 
 				<button
@@ -196,7 +197,7 @@ const CountdownTimer: FunctionalComponent = () => {
 					<svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
 						<path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z" clipRule="evenodd" />
 					</svg>
-					<span>Stop</span>
+					<span>{t('stop')}</span>
 				</button>
 			</div>
 
@@ -204,12 +205,12 @@ const CountdownTimer: FunctionalComponent = () => {
 			<div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-white/20">
 				<div className="grid grid-cols-2 gap-4 text-center text-xs sm:text-sm">
 					<div>
-						<div className="font-semibold">Total Time</div>
+						<div className="font-semibold">{t('totalTime')}</div>
 						<div className="opacity-75">{Math.floor(totalProgress / 60)}m {totalProgress % 60}s</div>
 					</div>
 					<div>
-						<div className="font-semibold">Remaining</div>
-						<div className="opacity-75">{timers.length - currentIndex} timers</div>
+						<div className="font-semibold">{t('remaining')}</div>
+						<div className="opacity-75">{timers.length - currentIndex} {timers.length - currentIndex !== 1 ? t('timers') : t('timer')}</div>
 					</div>
 				</div>
 			</div>

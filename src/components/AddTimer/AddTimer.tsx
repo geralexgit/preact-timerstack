@@ -1,6 +1,7 @@
 import { h, FunctionalComponent } from 'preact'
 import { useState } from 'preact/hooks'
 import { useStoreon } from 'storeon/preact'
+import { t } from '../../helpers/i18n'
 
 const AddTimer: FunctionalComponent = () => {
 	const {
@@ -101,19 +102,19 @@ const AddTimer: FunctionalComponent = () => {
 	return (
 		<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
 			<h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
-				➕ Add New Timer
+				➕ {t('addNewTimer')}
 			</h2>
 			<form onSubmit={onSubmit} className="space-y-4">
 				<div>
 					<label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-						Timer Name
+						{t('timerName')}
 					</label>
 					<input
 						type="text"
 						value={formValues?.name}
 						data-name="name"
 						onInput={onInput}
-						placeholder="e.g., Focus Session, Break Time"
+						placeholder={t('timerNamePlaceholder')}
 						className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
 						required
 					/>
@@ -122,7 +123,7 @@ const AddTimer: FunctionalComponent = () => {
 				<div className="grid grid-cols-2 gap-4">
 					<div>
 						<label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-							Minutes
+							{t('minutes')}
 						</label>
 						<input
 							type="number"
@@ -137,7 +138,7 @@ const AddTimer: FunctionalComponent = () => {
 					</div>
 					<div>
 						<label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-							Seconds
+							{t('seconds')}
 						</label>
 						<input
 							type="number"
@@ -160,10 +161,10 @@ const AddTimer: FunctionalComponent = () => {
 					<span>➕</span>
 					<span>
 						{isActive
-							? 'Timer Running...'
+							? t('timerRunning')
 							: !isFormValid()
-								? 'Enter Valid Timer'
-								: 'Add Timer'
+								? t('enterValidTimer')
+								: t('addTimer')
 						}
 					</span>
 				</button>

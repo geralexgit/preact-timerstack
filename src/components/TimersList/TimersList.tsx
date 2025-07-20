@@ -2,6 +2,7 @@ import { h, FunctionalComponent } from 'preact'
 import { useState, useEffect, useRef } from 'preact/hooks'
 import { useStoreon } from 'storeon/preact'
 import Modal from '../Modal/Modal'
+import { t } from '../../helpers/i18n'
 
 const TimersList: FunctionalComponent = () => {
 	const { timers, status: { currentIndex, isActive }, dispatch } = useStoreon('timers', 'status')
@@ -72,7 +73,7 @@ const TimersList: FunctionalComponent = () => {
 		<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
 			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
 				<h2 className="text-xl font-semibold text-gray-800 dark:text-white flex items-center">
-					📋 Timer Queue
+					📋 {t('timerQueue')}
 				</h2>
 				<div className="flex gap-2 self-start sm:self-auto">
 					<button
@@ -80,14 +81,14 @@ const TimersList: FunctionalComponent = () => {
 						className="bg-cyan-500 hover:bg-cyan-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors"
 						title="Start fresh with an empty timer list"
 					>
-						✨ New
+						✨ {t('newList')}
 					</button>
 				</div>
 			</div>
 			<div ref={scrollContainerRef} className="max-h-45 overflow-y-auto overflow-x-hidden">
 				{timers?.length === 0 ? (
 					<p className="text-gray-500 dark:text-gray-400 text-center py-8">
-						No timers added yet. Add your first timer below!
+						{t('noTimersAdded')}
 					</p>
 				) : (
 					<ul className="space-y-2 pr-2">
@@ -153,7 +154,7 @@ const TimersList: FunctionalComponent = () => {
 			<Modal
 				isOpen={showNewListModal}
 				onClose={() => setShowNewListModal(false)}
-				title="Create New Timer List"
+				title={t('clearCurrentTimers')}
 				maxWidth="md"
 			>
 				<div className="space-y-4">
@@ -163,10 +164,10 @@ const TimersList: FunctionalComponent = () => {
 						</div>
 						<div>
 							<h4 className="font-medium text-yellow-800 dark:text-yellow-200">
-								Clear Current Timers?
+								{t('clearCurrentTimers')}
 							</h4>
 							<p className="text-sm text-yellow-700 dark:text-yellow-300">
-								This will remove all {timers.length} timer{timers.length !== 1 ? 's' : ''} from your current list and stop any running timer.
+								This will remove all {timers.length} {timers.length !== 1 ? t('timers') : t('timer')} from your current list and stop any running timer.
 							</p>
 						</div>
 					</div>

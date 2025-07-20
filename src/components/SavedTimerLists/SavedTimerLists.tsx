@@ -1,4 +1,4 @@
-import { h, FunctionalComponent } from 'preact'
+import { h, FunctionalComponent, Fragment } from 'preact'
 import { useState, useEffect } from 'preact/hooks'
 import { useStoreon } from 'storeon/preact'
 import { TimerList } from '../../store/storeTypes'
@@ -163,7 +163,7 @@ const SavedTimerLists: FunctionalComponent<SavedTimerListsProps> = ({ onClose })
 	}
 
 	return (
-		<>
+		<Fragment>
 			<Modal
 				isOpen={true}
 				onClose={onClose || (() => {})}
@@ -313,7 +313,7 @@ const SavedTimerLists: FunctionalComponent<SavedTimerListsProps> = ({ onClose })
 				</div>
 			</Modal>
 
-		</>
+		</Fragment>
 	)
 }
 
