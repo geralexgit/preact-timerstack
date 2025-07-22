@@ -34,8 +34,9 @@ html {
 body {
 	margin: 0;
 	padding: 0;
-	height: 100vh;
-	overflow: hidden;
+	min-height: 100vh;
+	overflow-x: hidden;
+	overflow-y: auto;
 	box-sizing: border-box;
 }
 
@@ -46,8 +47,16 @@ body {
 	margin: 0 auto;
 	min-height: calc(100vh - 7.5rem);
 	max-width: 1280px;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: center;
+	padding-left: 1rem;
+	padding-right: 1rem;
+}
+
+@media (min-height: 800px) {
+	#app>main {
+		align-items: center;
+	}
 }
 
 /* Modal Animations */
