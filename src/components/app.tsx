@@ -1,10 +1,10 @@
 import { h } from 'preact'
-// import { Route, Router } from 'preact-router'
 import { StoreContext } from 'storeon/preact'
 import { store } from '../store/storeIndex'
 
-// Code-splitting is automated for `routes` directory
-import Home from '../routes/home/index'
+import CountdownTimer from './CountdownTimers/CountdownTimers'
+import TimersList from './TimersList/TimersList'
+import AddTimer from './AddTimer/AddTimer'
 import ProgressBar from './ProgressBar/ProgressBar'
 import Navbar from './Navbar/Navbar'
 
@@ -13,8 +13,19 @@ const App = () => (
 		<StoreContext.Provider value={store}>
 			<Navbar />
 			<main className="container">
-				<div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-xl p-3 sm:p-6 mb-16 sm:mb-6">
-					<Home />
+				<div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-xl p-3 sm:p-6 mb-10 sm:mb-6">
+					<div className="space-y-6 sm:space-y-8">
+						{/* Main Timer Interface */}
+						<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+							<div className="space-y-6 order-2 lg:order-1">
+								<AddTimer />
+								<TimersList />
+							</div>
+							<div className="order-1 lg:order-2">
+								<CountdownTimer />
+							</div>
+						</div>
+					</div>
 				</div>
 				{/* <ProgressBar /> */}
 			</main>
