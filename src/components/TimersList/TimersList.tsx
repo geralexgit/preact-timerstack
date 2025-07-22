@@ -181,7 +181,7 @@ const TimersList: FunctionalComponent = () => {
 					</button>
 				</div>
 			</div>
-			<div ref={scrollContainerRef} className="max-h-45 overflow-y-auto overflow-x-hidden">
+			<div ref={scrollContainerRef} className="max-h-60 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-600 scrollbar-track-gray-200 dark:scrollbar-track-gray-800">
 				{timers?.length === 0 ? (
 					<p className="text-gray-500 dark:text-gray-400 text-center py-8">
 						{t('noTimersAdded')}

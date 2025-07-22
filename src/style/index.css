@@ -3,6 +3,7 @@ html {
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
+
 *,
 *:before,
 *:after {
@@ -33,19 +34,20 @@ html {
 body {
 	margin: 0;
 	padding: 0;
-	min-height: 100vh;
+	height: 100vh;
+	overflow: hidden;
 	box-sizing: border-box;
 }
 
-#app > main {
+#app>main {
 	display: flex;
 	padding-top: 3.5rem;
+	padding-bottom: 4rem;
 	margin: 0 auto;
-	min-height: calc(100vh - 3.5rem);
+	min-height: calc(100vh - 7.5rem);
 	max-width: 1280px;
 	align-items: center;
 	justify-content: center;
-	/* padding-bottom: 80px; */
 }
 
 /* Modal Animations */
@@ -53,6 +55,7 @@ body {
 	from {
 		opacity: 0;
 	}
+
 	to {
 		opacity: 1;
 	}
@@ -63,6 +66,7 @@ body {
 		opacity: 0;
 		transform: scale(0.95);
 	}
+
 	to {
 		opacity: 1;
 		transform: scale(1);

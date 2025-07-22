@@ -13,7 +13,7 @@ const App = () => (
 		<StoreContext.Provider value={store}>
 			<Navbar />
 			<main className="container">
-				<div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-xl p-3 sm:p-6 mb-10 sm:mb-6">
+				<div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-xl p-3 sm:p-6">
 					<div className="space-y-6 sm:space-y-8">
 						{/* Main Timer Interface */}
 						<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
@@ -33,18 +33,18 @@ const App = () => (
 				<div className="container mx-auto max-w-4xl">
 					<div className="flex items-center justify-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
 						<span>Made by Alex Grsmv</span>
-						<a 
-							href="https://t.me/geralex" 
-							target="_blank" 
+						<a
+							href="https://t.me/geralex"
+							target="_blank"
 							rel="noopener noreferrer"
 							className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 transition-colors flex items-center space-x-1"
 						>
 							<i className="bx bxl-telegram"></i>
 							<span>Telegram</span>
 						</a>
-						<a 
-							href="https://github.com/geralexgit" 
-							target="_blank" 
+						<a
+							href="https://github.com/geralexgit"
+							target="_blank"
 							rel="noopener noreferrer"
 							className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 transition-colors flex items-center space-x-1"
 						>
