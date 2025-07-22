@@ -18,6 +18,31 @@ const App = () => (
 				</div>
 				{/* <ProgressBar /> */}
 			</main>
+			<footer className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-2 px-4">
+				<div className="container mx-auto max-w-4xl">
+					<div className="flex items-center justify-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
+						<span>Made by Alex Grsmv</span>
+						<a 
+							href="https://t.me/geralex" 
+							target="_blank" 
+							rel="noopener noreferrer"
+							className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 transition-colors flex items-center space-x-1"
+						>
+							<i className="bx bxl-telegram"></i>
+							<span>Telegram</span>
+						</a>
+						<a 
+							href="https://github.com/geralexgit" 
+							target="_blank" 
+							rel="noopener noreferrer"
+							className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 transition-colors flex items-center space-x-1"
+						>
+							<i className="bx bxl-github"></i>
+							<span>GitHub</span>
+						</a>
+					</div>
+				</div>
+			</footer>
 		</StoreContext.Provider>
 	</div>
 )

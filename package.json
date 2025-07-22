@@ -3,6 +3,18 @@
   "name": "timerstack",
   "version": "0.0.0",
   "license": "MIT",
+  "author": {
+    "name": "geralex",
+    "url": "https://github.com/geralexgit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/geralexgit/timerstack"
+  },
+  "bugs": {
+    "url": "https://github.com/geralexgit/timerstack/issues"
+  },
+  "homepage": "https://github.com/geralexgit/timerstack",
   "scripts": {
     "build": "cross-env NODE_OPTIONS=--openssl-legacy-provider preact build",
     "serve": "sirv build --cors --single",
