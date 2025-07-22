@@ -16,6 +16,8 @@ export interface IStatus {
 	totalProgress: number
 	totalProgressPrecent: number
 	soundEnabled: boolean
+	soundType: 'voice' | 'chord1' | 'chord2'
+	completionSoundType: 'voice' | 'chord1' | 'chord2'
 }
 
 export interface State {
@@ -50,5 +52,7 @@ export interface Events {
 	'timer/deleteList': string
 	'timer/clearAll': void
 	'timer/toggleSound': void
+	'timer/setSoundType': 'voice' | 'chord1' | 'chord2'
+	'timer/setCompletionSoundType': 'voice' | 'chord1' | 'chord2'
 	'timer/skipTimer': void
 }

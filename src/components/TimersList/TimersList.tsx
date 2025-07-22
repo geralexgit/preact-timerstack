@@ -103,7 +103,7 @@ const TimersList: FunctionalComponent = () => {
 				numValue = Math.min(Math.max(0, numValue), 59)
 			}
 
-			processedValue = numValue
+			processedValue = numValue.toString()
 		} else if (name === 'name') {
 			// Trim whitespace and limit length
 			processedValue = value.slice(0, 50) // Limit name to 50 characters
@@ -332,7 +332,7 @@ const TimersList: FunctionalComponent = () => {
 							autoFocus
 						/>
 					</div>
-					
+
 					<div className="grid grid-cols-2 gap-4">
 						<div>
 							<label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -363,10 +363,10 @@ const TimersList: FunctionalComponent = () => {
 							/>
 						</div>
 					</div>
-					
+
 					<div className="flex space-x-3 pt-4">
-						<button 
-							type="submit" 
+						<button
+							type="submit"
 							disabled={!isEditFormValid()}
 							className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-3 px-6 rounded-lg transition-colors flex items-center justify-center space-x-2"
 						>
