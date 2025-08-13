@@ -1,5 +1,7 @@
 # timerstack
 
+🔗 **Live Demo**: [https://timerstack.ru/](https://timerstack.ru/)
+
 ## CLI Commands
 
 - `npm install`: Installs dependencies
@@ -17,6 +19,10 @@
   your tests
 
 For detailed explanation on how things work, checkout the [CLI Readme](https://github.com/developit/preact-cli/blob/master/README.md).
+
+## Author
+
+Made by **Alex Grsmv**
 
 ## Contact
 
